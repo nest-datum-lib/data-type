@@ -81,7 +81,7 @@ export class SettingSeeder {
 				id: 'data-type-setting-cache-db',
 				name: 'Cache db',
 				description: 'Redis database number.',
-				dataTypeId: 'data-type-type-integer',
+				dataTypeId: 'data-type-type-text',
 				value: process.env.REDIS_CACHE_PASSWORD,
 				isNotDelete: true,
 			}], async (data) => {

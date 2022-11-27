@@ -25,6 +25,7 @@ export class TypeStatusSeeder {
 				id: 'data-type-type-status-active',
 				name: 'Active',
 				description: 'Data type is active.',
+				userId: 'sso-user-admin',
 			}], async (data) => {
 				try {
 					await this.typeStatusRepository.insert(data);
