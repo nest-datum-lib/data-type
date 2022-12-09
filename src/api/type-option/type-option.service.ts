@@ -11,24 +11,21 @@ import {
 	Repository,
 	Connection, 
 } from 'typeorm';
+import { SqlService } from 'nest-datum/sql/src';
+import { CacheService } from 'nest-datum/cache/src';
 import { 
-	MysqlService,
-	RegistryService,
-	LogsService,
-	CacheService, 
-} from '@nest-datum/services';
-import { ErrorException } from '@nest-datum/exceptions';
+	ErrorException,
+	NotFoundException, 
+} from 'nest-datum/exceptions/src';
 import { TypeOption } from './type-option.entity';
 import { TypeTypeOption } from '../type-type-option/type-type-option.entity';
 
 @Injectable()
-export class TypeOptionService extends MysqlService {
+export class TypeOptionService extends SqlService {
 	constructor(
 		@InjectRepository(TypeOption) private readonly typeOptionRepository: Repository<TypeOption>,
 		@InjectRepository(TypeTypeOption) private readonly typeTypeOptionRepository: Repository<TypeTypeOption>,
 		private readonly connection: Connection,
-		private readonly registryService: RegistryService,
-		private readonly logsService: LogsService,
 		private readonly cacheService: CacheService,
 	) {
 		super();
@@ -56,50 +53,54 @@ export class TypeOptionService extends MysqlService {
 		regex: true,
 	};
 
-	async many(payload): Promise<any> {
+	async many({ user, ...payload }): Promise<any> {
 		try {
-			const cachedData = await this.cacheService.get(`${process.env.APP_ID}.typeOption.many`, payload);
+			const cachedData = await this.cacheService.get([ 'type', 'option', 'many', payload ]);
 
 			if (cachedData) {
 				return cachedData;
 			}
 			const output = await this.typeOptionRepository.findAndCount(await this.findMany(payload));
 
-			await this.cacheService.set(`${process.env.APP_ID}.typeOption.many`, payload, output);
+			await this.cacheService.set([ 'type', 'option', 'many', payload ], output);
 			
 			return output;
 		}
 		catch (err) {
-			throw new ErrorException(err.message, getCurrentLine(), payload);
+			throw new ErrorException(err.message, getCurrentLine(), { user, ...payload });
 		}
 		return [ [], 0 ];
 	}
 
-	async one(payload): Promise<any> {
+	async one({ user, ...payload }): Promise<any> {
 		try {
-			const cachedData = await this.cacheService.get(`${process.env.APP_ID}.typeOption.one`, payload);
+			const cachedData = await this.cacheService.get([ 'type', 'option', 'one', payload ]);
 
 			if (cachedData) {
 				return cachedData;
 			}
 			const output = await this.typeOptionRepository.findOne(await this.findOne(payload));
-
-			await this.cacheService.set(`${process.env.APP_ID}.typeOption.one`, payload, output);
-
+		
+			if (output) {
+				await this.cacheService.set([ 'type', 'option', 'one', payload ], output);
+			}
+			if (!output) {
+				return new NotFoundException('Entity is undefined', getCurrentLine(), { user, ...payload });
+			}
 			return output;
 		}
 		catch (err) {
-			throw new ErrorException(err.message, getCurrentLine(), payload);
+			throw new ErrorException(err.message, getCurrentLine(), { user, ...payload });
 		}
 	}
 
-	async drop(payload): Promise<any> {
+	async drop({ user, ...payload }): Promise<any> {
 		const queryRunner = await this.connection.createQueryRunner(); 
 
 		try {
 			await queryRunner.startTransaction();
-			await this.cacheService.clear(`${process.env.APP_ID}.typeOption.many`);
-			await this.cacheService.clear(`${process.env.APP_ID}.typeOption.one`, payload);
+			await this.cacheService.clear([ 'type', 'option', 'many' ]);
+			await this.cacheService.clear([ 'type', 'option', 'one', payload ]);
 
 			await this.typeTypeOptionRepository.delete({ typeOptionId: payload['id'] });
 			await this.dropByIsDeleted(this.typeOptionRepository, payload['id']);
@@ -112,20 +113,20 @@ export class TypeOptionService extends MysqlService {
 			await queryRunner.rollbackTransaction();
 			await queryRunner.release();
 
-			throw new ErrorException(err.message, getCurrentLine(), payload);
+			throw new ErrorException(err.message, getCurrentLine(), { user, ...payload });
 		}
 		finally {
 			await queryRunner.release();
 		}
 	}
 
-	async dropMany(payload): Promise<any> {
+	async dropMany({ user, ...payload }): Promise<any> {
 		const queryRunner = await this.connection.createQueryRunner(); 
 
 		try {
 			await queryRunner.startTransaction();
-			await this.cacheService.clear(`${process.env.APP_ID}.typeOption.many`);
-			await this.cacheService.clear(`${process.env.APP_ID}.typeOption.one`, payload);
+			await this.cacheService.clear([ 'type', 'option', 'many' ]);
+			await this.cacheService.clear([ 'type', 'option', 'one', payload ]);
 
 			let i = 0;
 
@@ -142,7 +143,7 @@ export class TypeOptionService extends MysqlService {
 			await queryRunner.rollbackTransaction();
 			await queryRunner.release();
 
-			throw new ErrorException(err.message, getCurrentLine(), payload);
+			throw new ErrorException(err.message, getCurrentLine(), { user, ...payload });
 		}
 		finally {
 			await queryRunner.release();
@@ -154,9 +155,12 @@ export class TypeOptionService extends MysqlService {
 
 		try {
 			await queryRunner.startTransaction();
-			await this.cacheService.clear(`${process.env.APP_ID}.typeOption.many`);
+			await this.cacheService.clear([ 'type', 'option', 'many' ]);
 
-			const output = await this.typeOptionRepository.save(payload);
+			const output = await this.typeOptionRepository.save({
+				...payload,
+				userId: payload['userId'] || user['id'] || '',
+			});
 
 			await queryRunner.commitTransaction();
 
@@ -178,8 +182,8 @@ export class TypeOptionService extends MysqlService {
 
 		try {
 			await queryRunner.startTransaction();
-			await this.cacheService.clear(`${process.env.APP_ID}.typeOption.many`);
-			await this.cacheService.clear(`${process.env.APP_ID}.typeOption.one`);
+			await this.cacheService.clear([ 'type', 'option', 'many' ]);
+			await this.cacheService.clear([ 'type', 'option', 'one' ]);
 			
 			await this.updateWithId(this.typeOptionRepository, payload);
 			

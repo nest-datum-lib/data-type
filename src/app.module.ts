@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeormConfig } from 'config/typeorm';
 import { redisConfig } from 'config/redis';
+import { BalancerModule } from 'nest-datum/balancer/src';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SettingModule } from './api/setting/setting.module';
@@ -16,6 +17,7 @@ import { TypeModule } from './api/type/type.module';
 	imports: [
 		TypeOrmModule.forRoot(typeormConfig),
 		RedisModule.forRoot(redisConfig),
+		BalancerModule,
 		SettingModule,
 		TypeStatusModule,
 		TypeOptionModule,

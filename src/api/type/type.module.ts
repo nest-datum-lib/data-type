@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { 
-	RegistryService,
-	LogsService,
-	CacheService, 
-} from '@nest-datum/services';
+	BalancerRepository,
+	BalancerService, 
+} from 'nest-datum/balancer/src';
+import { CacheService } from 'nest-datum/cache/src';
 import { TypeStatus } from '../type-status/type-status.entity';
 import { TypeTypeTypeOption } from '../type-type-type-option/type-type-type-option.entity';
 import { TypeTypeOption } from '../type-type-option/type-type-option.entity';
@@ -23,8 +23,8 @@ import { TypeController } from './type.controller';
 		]),
 	],
 	providers: [
-		RegistryService, 
-		LogsService,
+		BalancerRepository, 
+		BalancerService,
 		CacheService,
 		TypeService, 
 	],

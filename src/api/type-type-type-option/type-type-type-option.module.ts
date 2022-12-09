@@ -5,8 +5,10 @@ import { Type } from '../type/type.entity';
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([ TypeTypeOption ]),
-		TypeOrmModule.forFeature([ Type ]),
+		TypeOrmModule.forFeature([ 
+			TypeTypeOption,
+			Type, 
+		]),
 	],
 })
 export class TypeTypeTypeOptionModule {

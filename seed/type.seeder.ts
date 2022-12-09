@@ -58,6 +58,13 @@ export class TypeSeeder {
 				name: 'File',
 				description: 'File system resource.',
 				isNotDelete: true,
+			}, {
+				id: 'data-type-type-enum',
+				userId: 'sso-user-admin',
+				typeStatusId: 'data-type-type-status-active',
+				name: 'Enum',
+				description: 'Set of values.',
+				isNotDelete: true,
 			}], async (data) => {
 				try {
 					await this.typeRepository.insert(data);

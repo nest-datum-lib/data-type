@@ -11,22 +11,19 @@ import {
 	Repository,
 	Connection, 
 } from 'typeorm';
+import { SqlService } from 'nest-datum/sql/src';
+import { CacheService } from 'nest-datum/cache/src';
 import { 
-	MysqlService,
-	RegistryService,
-	LogsService,
-	CacheService, 
-} from '@nest-datum/services';
-import { ErrorException } from '@nest-datum/exceptions';
+	ErrorException,
+	NotFoundException, 
+} from 'nest-datum/exceptions/src';
 import { TypeStatus } from './type-status.entity';
 
 @Injectable()
-export class TypeStatusService extends MysqlService {
+export class TypeStatusService extends SqlService {
 	constructor(
 		@InjectRepository(TypeStatus) private readonly typeStatusRepository: Repository<TypeStatus>,
 		private readonly connection: Connection,
-		private readonly registryService: RegistryService,
-		private readonly logsService: LogsService,
 		private readonly cacheService: CacheService,
 	) {
 		super();
@@ -49,65 +46,69 @@ export class TypeStatusService extends MysqlService {
 		description: true,
 	};
 
-	async many(payload): Promise<any> {
+	async many({ user, ...payload }): Promise<any> {
 		try {
-			const cachedData = await this.cacheService.get(`${process.env.APP_ID}.typeStatus.many`, payload);
+			const cachedData = await this.cacheService.get([ 'type', 'status', 'many', payload ]);
 
 			if (cachedData) {
 				return cachedData;
 			}
 			const output = await this.typeStatusRepository.findAndCount(await this.findMany(payload));
 
-			await this.cacheService.set(`${process.env.APP_ID}.typeStatus.many`, payload, output);
+			await this.cacheService.set([ 'type', 'status', 'many', payload ], output);
 			
 			return output;
 		}
 		catch (err) {
-			throw new ErrorException(err.message, getCurrentLine(), payload);
+			throw new ErrorException(err.message, getCurrentLine(), { user, ...payload });
 		}
 
 		return [ [], 0 ];
 	}
 
-	async one(payload): Promise<any> {
+	async one({ user, ...payload }): Promise<any> {
 		try {
-			const cachedData = await this.cacheService.get(`${process.env.APP_ID}.typeStatus.one`, payload);
+			const cachedData = await this.cacheService.get([ 'type', 'status', 'one', payload ]);
 
 			if (cachedData) {
 				return cachedData;
 			}
 			const output = await this.typeStatusRepository.findOne(await this.findOne(payload));
-		
-			await this.cacheService.set(`${process.env.APP_ID}.typeStatus.one`, payload, output);
 
+			if (output) {
+				await this.cacheService.set([ 'type', 'status', 'one', payload ], output);
+			}
+			if (!output) {
+				return new NotFoundException('Entity is undefined', getCurrentLine(), { user, ...payload });
+			}
 			return output;
 		}
 		catch (err) {
-			throw new ErrorException(err.message, getCurrentLine(), payload);
+			throw new ErrorException(err.message, getCurrentLine(), { user, ...payload });
 		}
 	}
 
-	async drop(payload): Promise<any> {
+	async drop({ user, ...payload }): Promise<any> {
 		try {
-			await this.cacheService.clear(`${process.env.APP_ID}.typeStatus.many`);
-			await this.cacheService.clear(`${process.env.APP_ID}.typeStatus.one`, payload);
+			await this.cacheService.clear([ 'type', 'status', 'many' ]);
+			await this.cacheService.clear([ 'type', 'status', 'one', payload ]);
 
 			await this.dropByIsDeleted(this.typeStatusRepository, payload['id']);
-
+			
 			return true;
 		}
 		catch (err) {
-			throw new ErrorException(err.message, getCurrentLine(), payload);
+			throw new ErrorException(err.message, getCurrentLine(), { user, ...payload });
 		}
 	}
 
-	async dropMany(payload): Promise<any> {
+	async dropMany({ user, ...payload }): Promise<any> {
 		const queryRunner = await this.connection.createQueryRunner(); 
 
 		try {
 			await queryRunner.startTransaction();
-			await this.cacheService.clear(`${process.env.APP_ID}.typeStatus.many`);
-			await this.cacheService.clear(`${process.env.APP_ID}.typeStatus.one`, payload);
+			await this.cacheService.clear([ 'type', 'status', 'many' ]);
+			await this.cacheService.clear([ 'type', 'status', 'one', payload ]);
 
 			let i = 0;
 
@@ -123,7 +124,7 @@ export class TypeStatusService extends MysqlService {
 			await queryRunner.rollbackTransaction();
 			await queryRunner.release();
 
-			throw new ErrorException(err.message, getCurrentLine(), payload);
+			throw new ErrorException(err.message, getCurrentLine(), { user, ...payload });
 		}
 		finally {
 			await queryRunner.release();
@@ -135,9 +136,12 @@ export class TypeStatusService extends MysqlService {
 
 		try {
 			await queryRunner.startTransaction();
-			await this.cacheService.clear(`${process.env.APP_ID}.typeStatus.many`);
+			await this.cacheService.clear([ 'type', 'status', 'many' ]);
 
-			const output = await this.typeStatusRepository.save(payload);
+			const output = await this.typeStatusRepository.save({
+				...payload,
+				userId: payload['userId'] || user['id'] || '',
+			});
 
 			await queryRunner.commitTransaction();
 
@@ -159,8 +163,8 @@ export class TypeStatusService extends MysqlService {
 
 		try {
 			await queryRunner.startTransaction();
-			await this.cacheService.clear(`${process.env.APP_ID}.typeStatus.many`);
-			await this.cacheService.clear(`${process.env.APP_ID}.typeStatus.one`);
+			await this.cacheService.clear([ 'type', 'status', 'many' ]);
+			await this.cacheService.clear([ 'type', 'status', 'one' ]);
 			
 			await this.updateWithId(this.typeStatusRepository, payload);
 			
