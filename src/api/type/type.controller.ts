@@ -169,6 +169,32 @@ export class TypeController {
 		}
 	}
 
+	@EventPattern('type.createOptions')
+	async createOptions(payload) {
+		try {
+			const output = await this.typeService.createOptions({
+				user: Validators.token('accessToken', payload['accessToken'], {
+					accesses: [ process['ACCESS_DATA_TYPE_TYPE_CREATE_OPTIONS'] ],
+					isRequired: true,
+				}),
+				id: Validators.id('id', payload['id']),
+				data: Validators.arr('data', payload['data'], {
+					isRequired: true,
+				}),
+			});
+
+			this.balancerService.decrementServiceResponseLoadingIndicator();
+
+			return output;
+		}
+		catch (err) {
+			this.balancerService.log(err);
+			this.balancerService.decrementServiceResponseLoadingIndicator();
+
+			return err;
+		}
+	}
+
 	@EventPattern('type.update')
 	async update(payload) {
 		try {
