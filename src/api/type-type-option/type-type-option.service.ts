@@ -136,8 +136,6 @@ export class TypeTypeOptionService extends SqlService {
 		const queryRunner = await this.connection.createQueryRunner(); 
 
 		try {
-			console.log('user, id, typeId, typeOptionId', user, id, typeId, typeOptionId);
-
 			await queryRunner.startTransaction();
 
 			this.cacheService.clear([ 'type', 'option', 'relation', 'many' ]);
@@ -151,8 +149,6 @@ export class TypeTypeOptionService extends SqlService {
 				? (user['id'] || '')
 				: '';
 
-			console.log('userId', userId);
-
 			const typeOptionRelation = await this.typeTypeOptionRepository.save({
 				id: id || uuidv4(),
 				userId,
@@ -160,8 +156,6 @@ export class TypeTypeOptionService extends SqlService {
 				typeOptionId,
 			});
 
-			console.log('typeOptionRelation', typeOptionRelation);
-			
 			typeOptionRelation['userId'] = userId;
 
 			await queryRunner.commitTransaction();
@@ -169,8 +163,6 @@ export class TypeTypeOptionService extends SqlService {
 			return typeOptionRelation;
 		}
 		catch (err) {
-			console.log('errr', err);
-
 			await queryRunner.rollbackTransaction();
 			await queryRunner.release();
 
