@@ -136,6 +136,21 @@ export class TypeTypeOptionController {
 	@EventPattern('typeOptionRelation.create')
 	async create(payload) {
 		try {
+			console.log('payload', payload);
+			console.log('!!!!!!!!!!!!!!!!!!!!!!1', {
+				user: Validators.token('accessToken', payload['accessToken'], {
+					accesses: [ process['ACCESS_DATA_TYPE_TYPE_OPTION_RELATION_CREATE'] ],
+					isRequired: true,
+				}),
+				id: Validators.id('id', payload['id']),
+				typeId: Validators.id('typeId', payload['typeId'], {
+					isRequired: true,
+				}),
+				typeOptionId: Validators.id('typeOptionId', payload['typeOptionId'], {
+					isRequired: true,
+				}),
+			});
+
 			const output = await this.typeTypeOptionService.create({
 				user: Validators.token('accessToken', payload['accessToken'], {
 					accesses: [ process['ACCESS_DATA_TYPE_TYPE_OPTION_RELATION_CREATE'] ],
