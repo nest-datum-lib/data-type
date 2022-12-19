@@ -103,8 +103,9 @@ export class TypeOptionService extends SqlService {
 			this.cacheService.clear([ 'type', 'option', 'many' ]);
 			this.cacheService.clear([ 'type', 'option', 'one', payload ]);
 
-			await this.typeTypeOptionRepository.delete({ typeOptionId: payload['id'] });
-			await this.dropByIsDeleted(this.typeOptionRepository, payload['id']);
+			await this.dropByIsDeleted(this.typeOptionRepository, payload['id'], async (entity) => {
+				await this.typeTypeOptionRepository.delete({ typeOptionId: entity['id'] });
+			});
 
 			await queryRunner.commitTransaction();
 
@@ -133,8 +134,9 @@ export class TypeOptionService extends SqlService {
 			let i = 0;
 
 			while (i < payload['ids'].length) {
-				await this.typeTypeOptionRepository.delete({ typeOptionId: payload['ids'][i] });
-				await this.dropByIsDeleted(this.typeOptionRepository, payload['ids'][i]);
+				await this.dropByIsDeleted(this.typeOptionRepository, payload['ids'][i], async (entity) => {
+					await this.typeTypeOptionRepository.delete({ typeOptionId: entity['id'] });
+				});
 				i++;
 			}
 			await queryRunner.commitTransaction();

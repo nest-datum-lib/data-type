@@ -102,9 +102,10 @@ export class TypeService extends SqlService {
 			this.cacheService.clear([ 'type', 'many' ]);
 			this.cacheService.clear([ 'type', 'one', payload ]);
 
-			await this.typeTypeTypeOptionRepository.delete({ typeId: payload['id'] });
-			await this.typeTypeOptionRepository.delete({ typeId: payload['id'] });
-			await this.dropByIsDeleted(this.typeRepository, payload['id']);
+			await this.dropByIsDeleted(this.typeRepository, payload['id'], async (entity) => {
+				await this.typeTypeTypeOptionRepository.delete({ typeId: entity['id'] });
+				await this.typeTypeOptionRepository.delete({ typeId: entity['id'] });
+			});
 
 			await queryRunner.commitTransaction();
 
@@ -133,9 +134,10 @@ export class TypeService extends SqlService {
 			let i = 0;
 
 			while (i < payload['ids'].length) {
-				await this.typeTypeTypeOptionRepository.delete({ typeId: payload['ids'][i] });
-				await this.typeTypeOptionRepository.delete({ typeId: payload['ids'][i] });
-				await this.dropByIsDeleted(this.typeRepository, payload['ids'][i]);
+				await this.dropByIsDeleted(this.typeRepository, payload['ids'][i], async (entity) => {
+					await this.typeTypeTypeOptionRepository.delete({ typeId: entity['id'] });
+					await this.typeTypeOptionRepository.delete({ typeId: entity['id'] });
+				});
 				i++;
 			}
 			await queryRunner.commitTransaction();
