@@ -52,7 +52,7 @@ export class TypeSeeder {
 				description: 'TRUE or FALSE values.',
 				isNotDelete: true,
 			}, {
-				id: 'data-type-type-file',
+				id: 'data-type-type-file-upload',
 				userId: 'sso-user-admin',
 				typeStatusId: 'data-type-type-status-active',
 				name: 'File',

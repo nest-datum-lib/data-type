@@ -23,11 +23,11 @@ export class TypeTypeOptionSeeder {
 			await queryRunner.startTransaction();
 			await Bluebird.each([{
 				id: 'data-type-type-type-option-file-root',
-				typeId: 'data-type-type-file',
+				typeId: 'data-type-type-file-upload',
 				typeOptionId: 'data-type-type-option-file-root',
 			}, {
 				id: 'data-type-type-option-file-http-port',
-				typeId: 'data-type-type-file',
+				typeId: 'data-type-type-file-upload',
 				typeOptionId: 'data-type-type-option-file-http-port',
 			}], async (data) => {
 				try {
