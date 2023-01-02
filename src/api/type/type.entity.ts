@@ -17,6 +17,9 @@ export class Type {
 	public id: string;
 
 	@Column({ default: '' })
+	public parentId: string;
+
+	@Column({ default: '' })
 	public userId: string;
 
 	@Column({ default: '' })

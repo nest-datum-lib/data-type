@@ -143,6 +143,7 @@ export class TypeController {
 				}),
 				id: Validators.id('id', payload['id']),
 				userId: Validators.id('userId', payload['userId']),
+				parentId: Validators.id('userId', payload['userId']),
 				typeStatusId: Validators.id('typeStatusId', payload['typeStatusId'], {
 					isRequired: true,
 				}),
@@ -206,6 +207,7 @@ export class TypeController {
 				id: Validators.id('id', payload['id']),
 				newId: Validators.id('newId', payload['newId']),
 				userId: Validators.id('userId', payload['userId']),
+				parentId: Validators.id('userId', payload['userId']),
 				typeStatusId: Validators.id('typeStatusId', payload['typeStatusId']),
 				name: Validators.str('name', payload['name'], {
 					min: 1,

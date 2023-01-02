@@ -36,6 +36,7 @@ export class TypeService extends SqlService {
 	protected selectDefaultMany = {
 		id: true,
 		userId: true,
+		parentId: true,
 		typeStatusId: true,
 		name: true,
 		description: true,
@@ -47,6 +48,7 @@ export class TypeService extends SqlService {
 
 	protected queryDefaultMany = {
 		id: true,
+		parentId: true,
 		name: true,
 		description: true,
 	};
