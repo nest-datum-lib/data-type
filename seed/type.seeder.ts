@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { 
@@ -6,14 +5,13 @@ import {
 	Connection, 
 } from 'typeorm';
 import { Promise as Bluebird } from 'bluebird';
+import { encryptPassword } from '@nest-datum/jwt';
 import { Type } from 'src/api/type/type.entity';
-import { TypeStatus } from 'src/api/type-status/type-status.entity';
 
 export class TypeSeeder {
 	constructor(
 		private readonly connection: Connection,
 		@InjectRepository(Type) private readonly typeRepository: Repository<Type>,
-		@InjectRepository(TypeStatus) private readonly typeStatusRepository: Repository<TypeStatus>,
 	) {
 	}
 
@@ -59,6 +57,34 @@ export class TypeSeeder {
 				description: 'File system resource.',
 				isNotDelete: true,
 			}, {
+				id: 'data-type-type-file-select',
+				userId: 'sso-user-admin',
+				typeStatusId: 'data-type-type-status-active',
+				name: 'Select',
+				description: 'Select file from system.',
+				isNotDelete: true,
+			}, {
+				id: 'data-type-type-file-cv',
+				userId: 'sso-user-admin',
+				typeStatusId: 'data-type-type-status-active',
+				name: 'CV',
+				description: 'All PDF files.',
+				isNotDelete: true,
+			}, {
+				id: 'data-type-type-file-cv-lensa',
+				userId: 'sso-user-admin',
+				typeStatusId: 'data-type-type-status-active',
+				name: 'CV lensa',
+				description: 'PDF files from lesna API.',
+				isNotDelete: true,
+			}, {
+				id: 'data-type-type-file-avatar',
+				userId: 'sso-user-admin',
+				typeStatusId: 'data-type-type-status-active',
+				name: 'Avatars',
+				description: 'User avatars.',
+				isNotDelete: true,
+			}, {
 				id: 'data-type-type-enum',
 				userId: 'sso-user-admin',
 				typeStatusId: 'data-type-type-status-active',
@@ -72,7 +98,7 @@ export class TypeSeeder {
 				catch (err) {
 					await queryRunner.rollbackTransaction();
 
-					console.error(`ERROR: type 2: ${err.message}`);
+					console.error(`ERROR: user 2: ${err.message}`);
 				}
 			});
 			await queryRunner.commitTransaction();
@@ -80,7 +106,7 @@ export class TypeSeeder {
 		catch (err) {
 			await queryRunner.rollbackTransaction();
 
-			console.error(`ERROR: type 1: ${err.message}`);
+			console.error(`ERROR: user 1: ${err.message}`);
 		}
 		finally {
 			await queryRunner.release();

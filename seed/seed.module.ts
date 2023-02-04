@@ -1,46 +1,48 @@
 import { Module } from '@nestjs/common';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeormConfig } from 'config/typeorm';
-import { redisConfig } from 'config/redis';
-import { CacheService } from 'nest-datum/cache/src';
+import { 
+	redis,
+	sql, 
+} from '@nest-datum-common/config';
+import { 
+	ReplicaModule,
+	ReplicaService, 
+} from '@nest-datum/replica';
+import { 
+	TransportModule,
+	TransportService, 
+} from '@nest-datum/transport';
+import {
+	CacheModule, 
+	CacheService, 
+} from '@nest-datum/cache';
 import { SeedService } from './seed.service';
-import { TypeStatus } from 'src/api/type-status/type-status.entity';
-import { TypeOption } from 'src/api/type-option/type-option.entity';
-import { TypeTypeOption } from 'src/api/type-type-option/type-type-option.entity';
-import { TypeTypeTypeOption } from 'src/api/type-type-type-option/type-type-type-option.entity';
-import { Type } from 'src/api/type/type.entity';
 import { Setting } from 'src/api/setting/setting.entity';
-import { TypeStatusSeeder } from './type-status.seeder';
-import { TypeOptionSeeder } from './type-option.seeder';
-import { TypeTypeOptionSeeder } from './type-type-option.seeder';
-import { TypeTypeTypeOptionSeeder } from './type-type-type-option.seeder';
+import { Type } from 'src/api/type/type.entity';
 import { TypeSeeder } from './type.seeder';
 import { SettingSeeder } from './setting.seeder';
 
 @Module({
 	controllers: [],
 	imports: [
-		TypeOrmModule.forRoot(typeormConfig),
-		RedisModule.forRoot(redisConfig),
+		RedisModule.forRoot(redis),
+		TypeOrmModule.forRoot(sql),
 		TypeOrmModule.forFeature([
-			TypeStatus,
-			TypeOption,
-			TypeTypeOption,
-			TypeTypeTypeOption,
-			Type,
 			Setting,
+			Type,
 		]),
+		ReplicaModule,
+		TransportModule,
+		CacheModule,
 	],
 	providers: [
+		ReplicaService,
+		TransportService,
 		CacheService,
 		SeedService,
-		TypeStatusSeeder,
-		TypeOptionSeeder,
-		TypeTypeOptionSeeder,
-		TypeTypeTypeOptionSeeder,
-		TypeSeeder,
 		SettingSeeder,
+		TypeSeeder,
 	]
 })
 

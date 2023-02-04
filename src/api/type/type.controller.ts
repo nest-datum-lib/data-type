@@ -1,231 +1,136 @@
-import getCurrentLine from 'get-current-line';
-import { Controller } from '@nestjs/common';
 import { 
 	MessagePattern,
 	EventPattern, 
 } from '@nestjs/microservices';
-import { BalancerService } from 'nest-datum/balancer/src';
-import * as Validators from 'nest-datum/validators/src';
+import { Controller } from '@nestjs/common';
+import { WarningException } from '@nest-datum-common/exceptions';
+import { TransportService } from '@nest-datum/transport';
+import { Controller as NestDatumController } from '@nest-datum-common/controller';
+import { 
+	bool as utilsCheckBool,
+	exists as utilsCheckExists,
+	str as utilsCheckStr,
+	strId as utilsCheckStrId,
+	strName as utilsCheckStrName,
+	strEmail as utilsCheckStrEmail,
+	strPassword as utilsCheckStrPassword,
+	strDescription as utilsCheckStrDescription,
+	strRegex as utilsCheckStrRegex,
+	strDate as utilsCheckStrDate,
+} from '@nest-datum-utils/check';
+import { 
+	checkToken,
+	getUser, 
+} from '@nest-datum/jwt';
 import { TypeService } from './type.service';
 
 @Controller()
-export class TypeController {
+export class TypeController extends NestDatumController {
 	constructor(
-		private readonly typeService: TypeService,
-		private readonly balancerService: BalancerService,
+		public transportService: TransportService,
+		public service: TypeService,
 	) {
+		super(transportService, service);
+	}
+
+	validateCreate(options: object = {}) {
+		if (!utilsCheckStrName(options['name'])) {
+			throw new WarningException(`Property "name" is not valid.`);
+		}
+		if (!utilsCheckStrId(options['typeStatusId'])) {
+			throw new WarningException(`Property "typeStatusId" is not valid.`);
+		}
+		return this.validateUpdate(options);
+	}
+
+	validateUpdate(options: object = {}): object {
+		if (!checkToken(options['accessToken'], process.env.JWT_SECRET_ACCESS_KEY)) {
+			throw new WarningException(`User is undefined or token is not valid.`);
+		}
+		const user = getUser(options['accessToken']);
+
+		if (!user) {
+			throw new WarningException(`User is undefined or token is not valid.`);
+		}
+
+		return {
+			userId: user['id'],
+			...(options['id'] && utilsCheckStrId(options['id'])) 
+				? { id: options['id'] } 
+				: {},
+			...(options['newId'] && utilsCheckStrId(options['newId'])) 
+				? { newId: options['newId'] } 
+				: {},
+			...(options['name'] && utilsCheckStrName(options['name'])) 
+				? { name: options['name'] } 
+				: {},
+			...utilsCheckStrDescription(options['description']) 
+				? { description: options['description'] } 
+				: { description: '' },
+			...(options['parentId'] && utilsCheckStrId(options['parentId'])) 
+				? { parentId: options['parentId'] } 
+				: {},
+			...(options['typeStatusId'] && utilsCheckStrId(options['typeStatusId'])) 
+				? { typeStatusId: options['typeStatusId'] } 
+				: {},
+			...(utilsCheckExists(options['isNotDelete']) && utilsCheckBool(options['isNotDelete'])) 
+				? { isNotDelete: options['isNotDelete'] } 
+				: {},
+			...(utilsCheckExists(options['isDeleted']) && utilsCheckBool(options['isDeleted'])) 
+				? { isDeleted: options['isDeleted'] } 
+				: {},
+		};
 	}
 
 	@MessagePattern({ cmd: 'type.many' })
 	async many(payload) {
-		try {
-			const many = await this.typeService.many({
-				user: Validators.token('accessToken', payload['accessToken'], {
-					accesses: [ process['ACCESS_DATA_TYPE_TYPE_MANY'] ],
-					isRequired: true,
-				}),
-				relations: Validators.obj('relations', payload['relations']),
-				select: Validators.obj('select', payload['select']),
-				sort: Validators.obj('sort', payload['sort']),
-				filter: Validators.obj('filter', payload['filter']),
-				query: Validators.str('query', payload['query'], {
-					min: 1,
-					max: 255,
-				}),
-				page: Validators.int('page', payload['page'], {
-					min: 1,
-					default: 1,
-				}),
-				limit: Validators.int('limit', payload['limit'], {
-					min: 1,
-					default: 20,
-				}),
-			});
-
-			this.balancerService.decrementServiceResponseLoadingIndicator();
-
-			return {
-				total: many[1],
-				rows: many[0],
-			};
-		}
-		catch (err) {
-			this.balancerService.log(err);
-			this.balancerService.decrementServiceResponseLoadingIndicator();
-
-			return err;
-		}
+		return await super.many(payload);
 	}
 
 	@MessagePattern({ cmd: 'type.one' })
 	async one(payload) {
-		try {
-			const output = await this.typeService.one({
-				user: Validators.token('accessToken', payload['accessToken'], {
-					accesses: [ process['ACCESS_DATA_TYPE_TYPE_ONE'] ],
-					isRequired: true,
-				}),
-				relations: Validators.obj('relations', payload['relations']),
-				select: Validators.obj('select', payload['select']),
-				id: Validators.id('id', payload['id'], {
-					isRequired: true,
-				}),
-			});
-
-			this.balancerService.decrementServiceResponseLoadingIndicator();
-
-			return output;
-		}
-		catch (err) {
-			this.balancerService.log(err);
-			this.balancerService.decrementServiceResponseLoadingIndicator();
-
-			return err;
-		}
+		return await super.one(payload);
 	}
 
 	@EventPattern('type.drop')
 	async drop(payload) {
-		try {
-			await this.typeService.drop({
-				user: Validators.token('accessToken', payload['accessToken'], {
-					accesses: [ process['ACCESS_DATA_TYPE_TYPE_DROP'] ],
-					isRequired: true,
-				}),
-				id: Validators.id('id', payload['id'], {
-					isRequired: true,
-				}),
-			});
-			this.balancerService.decrementServiceResponseLoadingIndicator();
-
-			return true;
-		}
-		catch (err) {
-			this.balancerService.log(err);
-			this.balancerService.decrementServiceResponseLoadingIndicator();
-
-			return err;
-		}
+		return await super.drop(payload);
 	}
 
 	@EventPattern('type.dropMany')
 	async dropMany(payload) {
-		try {
-			await this.typeService.dropMany({
-				user: Validators.token('accessToken', payload['accessToken'], {
-					accesses: [ process['ACCESS_DATA_TYPE_TYPE_DROP_MANY'] ],
-					isRequired: true,
-				}),
-				ids: Validators.arr('ids', payload['ids'], {
-					isRequired: true,
-					min: 1,
-				}),
-			});
-			this.balancerService.decrementServiceResponseLoadingIndicator();
-
-			return true;
-		}
-		catch (err) {
-			this.balancerService.log(err);
-			this.balancerService.decrementServiceResponseLoadingIndicator();
-
-			return err;
-		}
+		return await super.dropMany(payload);
 	}
 
 	@EventPattern('type.create')
 	async create(payload) {
 		try {
-			const output = await this.typeService.create({
-				user: Validators.token('accessToken', payload['accessToken'], {
-					accesses: [ process['ACCESS_DATA_TYPE_TYPE_CREATE'] ],
-					isRequired: true,
-				}),
-				id: Validators.id('id', payload['id']),
-				userId: Validators.id('userId', payload['userId']),
-				parentId: Validators.id('parentId', payload['parentId']),
-				typeStatusId: Validators.id('typeStatusId', payload['typeStatusId'], {
-					isRequired: true,
-				}),
-				name: Validators.str('name', payload['name'], {
-					isRequired: true,
-					min: 1,
-					max: 255,
-				}),
-				description: Validators.str('description', payload['description'], {
-					min: 1,
-					max: 255,
-				}),
-				isNotDelete: Validators.bool('isNotDelete', payload['isNotDelete']),
-			});
-
-			this.balancerService.decrementServiceResponseLoadingIndicator();
+			const output = await this.service.create(this.validateCreate(payload));
+			
+			this.transportService.decrementLoadingIndicator();
 
 			return output;
 		}
 		catch (err) {
-			this.balancerService.log(err);
-
-			return err;
-		}
-	}
-
-	@EventPattern('type.createOptions')
-	async createOptions(payload) {
-		try {
-			const output = await this.typeService.createOptions({
-				user: Validators.token('accessToken', payload['accessToken'], {
-					accesses: [ process['ACCESS_DATA_TYPE_TYPE_CREATE_OPTIONS'] ],
-					isRequired: true,
-				}),
-				id: Validators.id('id', payload['id']),
-				data: Validators.arr('data', payload['data'], {
-					isRequired: true,
-				}),
-			});
-
-			this.balancerService.decrementServiceResponseLoadingIndicator();
-
-			return output;
-		}
-		catch (err) {
-			this.balancerService.log(err);
-			this.balancerService.decrementServiceResponseLoadingIndicator();
+			this.log(err);
+			this.transportService.decrementLoadingIndicator();
 
 			return err;
 		}
 	}
 
 	@EventPattern('type.update')
-	async update(payload) {
+	async update(payload: object = {}) {
 		try {
-			await this.typeService.update({
-				user: Validators.token('accessToken', payload['accessToken'], {
-					accesses: [ process['ACCESS_DATA_TYPE_TYPE_UPDATE'] ],
-					isRequired: true,
-				}),
-				id: Validators.id('id', payload['id']),
-				newId: Validators.id('newId', payload['newId']),
-				userId: Validators.id('userId', payload['userId']),
-				parentId: Validators.id('parentId', payload['parentId']),
-				typeStatusId: Validators.id('typeStatusId', payload['typeStatusId']),
-				name: Validators.str('name', payload['name'], {
-					min: 1,
-					max: 255,
-				}),
-				description: Validators.str('description', payload['description'], {
-					min: 1,
-					max: 255,
-				}),
-				isNotDelete: Validators.bool('isNotDelete', payload['isNotDelete']),
-				isDeleted: Validators.bool('isDeleted', payload['isDeleted']),
-				createdAt: Validators.date('createdAt', payload['createdAt']),
-			});
+			await this.service.update(this.validateUpdate(payload));
+
+			this.transportService.decrementLoadingIndicator();
 
 			return true;
 		}
 		catch (err) {
-			this.balancerService.log(err);
+			this.log(err);
+			this.transportService.decrementLoadingIndicator();
 
 			return err;
 		}

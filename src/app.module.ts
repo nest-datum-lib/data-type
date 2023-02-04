@@ -1,32 +1,54 @@
 import { RedisModule } from '@liaoliaots/nestjs-redis';
-import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeormConfig } from 'config/typeorm';
-import { redisConfig } from 'config/redis';
-import { BalancerModule } from 'nest-datum/balancer/src';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module } from '@nestjs/common';
+import { 
+	ReplicaModule,
+	ReplicaService, 
+} from '@nest-datum/replica';
+import { 
+	TransportModule,
+	TransportService, 
+} from '@nest-datum/transport';
+import {
+	CacheModule, 
+	CacheService, 
+} from '@nest-datum/cache';
+import { 
+	SqlModule,
+	SqlService, 
+} from '@nest-datum/sql';
+import { 
+	redis,
+	sql, 
+} from '@nest-datum-common/config';
 import { SettingModule } from './api/setting/setting.module';
+import { TypeModule } from './api/type/type.module';
 import { TypeStatusModule } from './api/type-status/type-status.module';
 import { TypeOptionModule } from './api/type-option/type-option.module';
 import { TypeTypeOptionModule } from './api/type-type-option/type-type-option.module';
-import { TypeTypeTypeOptionModule } from './api/type-type-type-option/type-type-type-option.module';
-import { TypeModule } from './api/type/type.module';
+import { AppController } from './app.controller';
 
 @Module({
 	imports: [
-		TypeOrmModule.forRoot(typeormConfig),
-		RedisModule.forRoot(redisConfig),
-		BalancerModule,
+		TypeOrmModule.forRoot(sql),
+		RedisModule.forRoot(redis),
+		ReplicaModule,
+		TransportModule,
+		CacheModule,
+		SqlModule,
 		SettingModule,
+		TypeModule,
 		TypeStatusModule,
 		TypeOptionModule,
 		TypeTypeOptionModule,
-		TypeTypeTypeOptionModule,
-		TypeModule,
 	],
 	controllers: [ AppController ],
-	providers: [ AppService ],
+	providers: [
+		ReplicaService,
+		TransportService,
+		CacheService,
+		SqlService,
+	],
 })
 export class AppModule {
 }
