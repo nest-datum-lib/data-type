@@ -17,6 +17,7 @@ import {
 	generateTokens,
 	checkPassword,
 } from '@nest-datum/jwt';
+import { TypeTypeTypeOption } from '../type-type-type-option/type-type-type-option.entity';
 import { Type } from './type.entity';
 
 @Injectable()
@@ -25,9 +26,11 @@ export class TypeService extends SqlService {
 	public entityConstructor = Type;
 	public optionId = 'typeId';
 	public optionOptionId = 'typeTypeOptionId';
+	public optionRelationConstructor = TypeTypeTypeOption;
 
 	constructor(
 		@InjectRepository(Type) public repository: Repository<Type>,
+		@InjectRepository(TypeTypeTypeOption) public repositoryOptionRelation: Repository<TypeTypeTypeOption>,
 		public connection: Connection,
 		public cacheService: CacheService,
 	) {
