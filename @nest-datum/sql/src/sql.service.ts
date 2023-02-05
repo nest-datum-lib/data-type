@@ -312,19 +312,12 @@ export class SqlService {
 					const {
 						entityOptionId,
 						entityId,
-						id: itemId,
 						...optionData
 					} = option[ii];
 
-					console.log('???', {
-						...optionData,
-						[this.optionId]: itemId,
-						[this.optionOptionId]: entityOptionId,
-					});
-
 					await queryRunner.manager.save(Object.assign(new this.optionRelationConstructor, {
 						...optionData,
-						[this.optionId]: itemId,
+						[this.optionId]: entityId,
 						[this.optionOptionId]: entityOptionId,
 					}));
 					ii++;
