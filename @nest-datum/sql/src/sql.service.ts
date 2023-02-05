@@ -315,12 +315,6 @@ export class SqlService {
 						...optionData
 					} = option[ii];
 
-					console.log('>>>>>>>', {
-						...optionData,
-						[this.optionId]: entityId,
-						[this.optionOptionId]: entityOptionId,
-					});
-
 					await queryRunner.manager.save(Object.assign(new this.optionRelationConstructor, {
 						...optionData,
 						[this.optionId]: entityId,
