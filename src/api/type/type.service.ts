@@ -23,6 +23,8 @@ import { Type } from './type.entity';
 export class TypeService extends SqlService {
 	public entityName = 'type';
 	public entityConstructor = Type;
+	public optionId = 'typeId';
+	public optionOptionId = 'typeTypeOptionId';
 
 	constructor(
 		@InjectRepository(Type) public repository: Repository<Type>,

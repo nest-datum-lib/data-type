@@ -332,7 +332,7 @@ export class SqlService {
 		catch (err) {
 			await queryRunner.rollbackTransaction();
 
-			throw new err;
+			throw err;
 		}
 		finally {
 			await queryRunner.release();
