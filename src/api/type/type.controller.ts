@@ -102,6 +102,11 @@ export class TypeController extends NestDatumController {
 		return await super.dropMany(payload);
 	}
 
+	@EventPattern('type.createOptions')
+	async createOptions(payload) {
+		return await super.createOptions(payload);
+	}
+
 	@EventPattern('type.create')
 	async create(payload) {
 		try {
