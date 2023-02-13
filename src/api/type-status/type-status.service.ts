@@ -4,19 +4,20 @@ import {
 	Repository,
 	Connection, 
 } from 'typeorm';
-import { StatusService as NestDatumStatusService } from '@nest-datum/status';
+import { StatusService } from '@nest-datum/status';
 import { CacheService } from '@nest-datum/cache';
 import { TypeStatus } from './type-status.entity';
 
 @Injectable()
-export class TypeStatusService extends NestDatumStatusService {
-	public entityConstructor = TypeStatus;
+export class TypeStatusService extends StatusService {
+	protected entityName = 'typeStatus';
+	protected entityConstructor = TypeStatus;
 
 	constructor(
-		@InjectRepository(TypeStatus) public repository: Repository<TypeStatus>,
-		public connection: Connection,
-		public cacheService: CacheService,
+		@InjectRepository(TypeStatus) protected entityRepository: Repository<TypeStatus>,
+		protected connection: Connection,
+		protected cacheService: CacheService,
 	) {
-		super(repository, connection, cacheService);
+		super();
 	}
 }

@@ -6,7 +6,12 @@ import {
 } from 'typeorm';
 import { Promise as Bluebird } from 'bluebird';
 import { v4 as uuidv4 } from 'uuid';
-import { Setting } from 'src/api/setting/setting.entity';
+import { Setting } from '../api/setting/setting.entity';
+import {
+	SETTING_APP_ID,
+	USER_DEFAULT_ID,
+	DATA_TYPE_TEXT_ID,
+} from './consts';
 
 export class SettingSeeder {
 	constructor(
@@ -22,11 +27,12 @@ export class SettingSeeder {
 			// new transaction
 			await queryRunner.startTransaction();
 			await Bluebird.each([{
-				id: 'sso-setting-app-id',
+				id: SETTING_APP_ID,
+				userId: USER_DEFAULT_ID,
 				name: 'App id',
 				description: 'App id.',
-				dataTypeId: 'data-type-type-text',
-				value: process.env.APP_ID || 'files1',
+				dataTypeId: DATA_TYPE_TEXT_ID,
+				value: process.env.APP_ID,
 				isNotDelete: true,
 			}], async (data) => {
 				try {

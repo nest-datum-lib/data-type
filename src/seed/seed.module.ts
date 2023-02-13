@@ -18,13 +18,14 @@ import {
 	CacheService, 
 } from '@nest-datum/cache';
 import { SeedService } from './seed.service';
-import { Setting } from 'src/api/setting/setting.entity';
-import { Type } from 'src/api/type/type.entity';
-import { TypeTypeTypeOption } from 'src/api/type-type-type-option/type-type-type-option.entity';
-import { TypeOption } from 'src/api/type-option/type-option.entity';
-import { TypeTypeOption } from 'src/api/type-type-option/type-type-option.entity';
-import { TypeSeeder } from './type.seeder';
+import { Setting } from '../api/setting/setting.entity';
+import { TypeTypeTypeOption } from '../api/type-type-type-option/type-type-type-option.entity';
+import { TypeOption } from '../api/type-option/type-option.entity';
+import { TypeTypeOption } from '../api/type-type-option/type-type-option.entity';
+import { Type } from '../api/type/type.entity';
 import { SettingSeeder } from './setting.seeder';
+import { TypeOptionSeeder } from './type-option.seeder';
+import { TypeSeeder } from './type.seeder';
 
 @Module({
 	controllers: [],
@@ -48,6 +49,7 @@ import { SettingSeeder } from './setting.seeder';
 		CacheService,
 		SeedService,
 		SettingSeeder,
+		TypeOptionSeeder,
 		TypeSeeder,
 	]
 })

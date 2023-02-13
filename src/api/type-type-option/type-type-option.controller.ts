@@ -4,16 +4,19 @@ import {
 } from '@nestjs/microservices';
 import { Controller } from '@nestjs/common';
 import { TransportService } from '@nest-datum/transport';
-import { OptionOptionController as NestDatumOptionOptionController } from '@nest-datum/option';
+import { OptionOptionTcpController } from '@nest-datum/option';
 import { TypeTypeOptionService } from './type-type-option.service';
 
 @Controller()
-export class TypeTypeOptionController extends NestDatumOptionOptionController {
+export class TypeTypeOptionController extends OptionOptionTcpController {
+	protected entityId = 'typeId';
+	protected entityOptionId = 'typeOptionId';
+
 	constructor(
-		public transportService: TransportService,
-		public service: TypeTypeOptionService,
+		protected transportService: TransportService,
+		protected entityService: TypeTypeOptionService,
 	) {
-		super(transportService, service, 'typeId', 'typeOptionId');
+		super();
 	}
 
 	@MessagePattern({ cmd: 'typeOptionRelation.many' })

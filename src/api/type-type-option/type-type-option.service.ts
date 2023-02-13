@@ -4,28 +4,22 @@ import {
 	Repository,
 	Connection, 
 } from 'typeorm';
-import { OptionOptionService as NestDatumOptionOptionService } from '@nest-datum/option';
+import { OptionOptionService } from '@nest-datum/option';
 import { CacheService } from '@nest-datum/cache';
 import { TypeTypeOption } from './type-type-option.entity';
 
 @Injectable()
-export class TypeTypeOptionService extends NestDatumOptionOptionService {
-	public entityName = 'typeTypeOption';
-	public entityConstructor = TypeTypeOption;
+export class TypeTypeOptionService extends OptionOptionService {
+	protected entityName = 'typeTypeOption';
+	protected entityConstructor = TypeTypeOption;
+	protected entityOptionId = 'typeOptionId';
+	protected entityId = 'typeId';
 
 	constructor(
-		@InjectRepository(TypeTypeOption) public repository: Repository<TypeTypeOption>,
-		public connection: Connection,
-		public cacheService: CacheService,
+		@InjectRepository(TypeTypeOption) protected entityRepository: Repository<TypeTypeOption>,
+		protected connection: Connection,
+		protected cacheService: CacheService,
 	) {
-		super(repository, connection, cacheService);
+		super();
 	}
-
-	protected selectDefaultMany = {
-		id: true,
-		typeId: true,
-		typeOptionId: true,
-		createdAt: true,
-		updatedAt: true,
-	};
 }

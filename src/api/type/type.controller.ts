@@ -5,79 +5,40 @@ import {
 import { Controller } from '@nestjs/common';
 import { WarningException } from '@nest-datum-common/exceptions';
 import { TransportService } from '@nest-datum/transport';
-import { Controller as NestDatumController } from '@nest-datum-common/controller';
+import { TcpController } from '@nest-datum/controller';
 import { 
-	bool as utilsCheckBool,
-	exists as utilsCheckExists,
-	str as utilsCheckStr,
 	strId as utilsCheckStrId,
-	strName as utilsCheckStrName,
-	strEmail as utilsCheckStrEmail,
-	strPassword as utilsCheckStrPassword,
-	strDescription as utilsCheckStrDescription,
-	strRegex as utilsCheckStrRegex,
-	strDate as utilsCheckStrDate,
+	strName as utilsCheckStrName, 
 } from '@nest-datum-utils/check';
-import { 
-	checkToken,
-	getUser, 
-} from '@nest-datum/jwt';
 import { TypeService } from './type.service';
 
 @Controller()
-export class TypeController extends NestDatumController {
+export class TypeController extends TcpController {
 	constructor(
-		public transportService: TransportService,
-		public service: TypeService,
+		protected transportService: TransportService,
+		protected entityService: TypeService,
 	) {
-		super(transportService, service);
+		super();
 	}
 
-	validateCreate(options: object = {}) {
+	async validateCreate(options) {
 		if (!utilsCheckStrName(options['name'])) {
 			throw new WarningException(`Property "name" is not valid.`);
 		}
 		if (!utilsCheckStrId(options['typeStatusId'])) {
 			throw new WarningException(`Property "typeStatusId" is not valid.`);
 		}
-		return this.validateUpdate(options);
+		return await this.validateUpdate(options);
 	}
 
-	validateUpdate(options: object = {}): object {
-		if (!checkToken(options['accessToken'], process.env.JWT_SECRET_ACCESS_KEY)) {
-			throw new WarningException(`User is undefined or token is not valid.`);
-		}
-		const user = getUser(options['accessToken']);
-
-		if (!user) {
-			throw new WarningException(`User is undefined or token is not valid.`);
-		}
-
+	async validateUpdate(options) {
 		return {
-			userId: user['id'],
-			...(options['id'] && utilsCheckStrId(options['id'])) 
-				? { id: options['id'] } 
-				: {},
-			...(options['newId'] && utilsCheckStrId(options['newId'])) 
-				? { newId: options['newId'] } 
-				: {},
-			...(options['name'] && utilsCheckStrName(options['name'])) 
-				? { name: options['name'] } 
-				: {},
-			...utilsCheckStrDescription(options['description']) 
-				? { description: options['description'] } 
-				: { description: '' },
-			...(options['parentId'] && utilsCheckStrId(options['parentId'])) 
-				? { parentId: options['parentId'] } 
-				: {},
+			...await super.validateUpdate(options),
 			...(options['typeStatusId'] && utilsCheckStrId(options['typeStatusId'])) 
 				? { typeStatusId: options['typeStatusId'] } 
 				: {},
-			...(utilsCheckExists(options['isNotDelete']) && utilsCheckBool(options['isNotDelete'])) 
-				? { isNotDelete: options['isNotDelete'] } 
-				: {},
-			...(utilsCheckExists(options['isDeleted']) && utilsCheckBool(options['isDeleted'])) 
-				? { isDeleted: options['isDeleted'] } 
+			...(options['parentId'] && utilsCheckStrId(options['parentId'])) 
+				? { parentId: options['parentId'] } 
 				: {},
 		};
 	}
@@ -102,42 +63,13 @@ export class TypeController extends NestDatumController {
 		return await super.dropMany(payload);
 	}
 
-	@EventPattern('type.createOptions')
-	async createOptions(payload) {
-		return await super.createOptions(payload);
-	}
-
 	@EventPattern('type.create')
 	async create(payload) {
-		try {
-			const output = await this.service.create(this.validateCreate(payload));
-			
-			this.transportService.decrementLoadingIndicator();
-
-			return output;
-		}
-		catch (err) {
-			this.log(err);
-			this.transportService.decrementLoadingIndicator();
-
-			return err;
-		}
+		return await super.create(payload);
 	}
 
 	@EventPattern('type.update')
-	async update(payload: object = {}) {
-		try {
-			await this.service.update(this.validateUpdate(payload));
-
-			this.transportService.decrementLoadingIndicator();
-
-			return true;
-		}
-		catch (err) {
-			this.log(err);
-			this.transportService.decrementLoadingIndicator();
-
-			return err;
-		}
+	async update(payload) {
+		return await super.update(payload);
 	}
 }

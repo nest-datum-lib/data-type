@@ -3,12 +3,12 @@ import {
 	Column, 
 	ManyToOne,
 } from 'typeorm';
-import { OptionOptionOption as NestDatumOptionOptionOption } from '@nest-datum/option';
+import { OptionOptionOption } from '@nest-datum/option';
 import { TypeTypeOption } from '../type-type-option/type-type-option.entity';
 import { Type } from '../type/type.entity';
 
 @Entity()
-export class TypeTypeTypeOption extends NestDatumOptionOptionOption {
+export class TypeTypeTypeOption extends OptionOptionOption {
 	@Column()
 	public typeTypeOptionId: string;
 
