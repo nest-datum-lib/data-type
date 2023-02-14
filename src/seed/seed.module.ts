@@ -19,11 +19,13 @@ import {
 } from '@nest-datum/cache';
 import { SeedService } from './seed.service';
 import { Setting } from '../api/setting/setting.entity';
+import { TypeStatus } from '../api/type-status/type-status.entity';
 import { TypeTypeTypeOption } from '../api/type-type-type-option/type-type-type-option.entity';
 import { TypeOption } from '../api/type-option/type-option.entity';
 import { TypeTypeOption } from '../api/type-type-option/type-type-option.entity';
 import { Type } from '../api/type/type.entity';
 import { SettingSeeder } from './setting.seeder';
+import { TypeStatusSeeder } from './type-status.seeder';
 import { TypeOptionSeeder } from './type-option.seeder';
 import { TypeSeeder } from './type.seeder';
 
@@ -34,6 +36,7 @@ import { TypeSeeder } from './type.seeder';
 		TypeOrmModule.forRoot(sql),
 		TypeOrmModule.forFeature([
 			Setting,
+			TypeStatus,
 			TypeOption,
 			TypeTypeOption,
 			Type,
@@ -49,6 +52,7 @@ import { TypeSeeder } from './type.seeder';
 		CacheService,
 		SeedService,
 		SettingSeeder,
+		TypeStatusSeeder,
 		TypeOptionSeeder,
 		TypeSeeder,
 	]
