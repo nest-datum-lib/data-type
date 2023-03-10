@@ -263,9 +263,9 @@ export class SqlService {
 		const processedPayload = await this.manyProperties(payload);
 		const condition = await this.findMany(processedPayload);
 
-		console.log('condition', condition);
+		console.log('condition', condition['where']['typeTypeOptions']);
 
-		const many = await this.entityRepository.findAndCount(await this.findMany(processedPayload));
+		const many = await this.entityRepository.findAndCount(condition);
 		const output = {
 			rows: many[0],
 			total: many[1],
