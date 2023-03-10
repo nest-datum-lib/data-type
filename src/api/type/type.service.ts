@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { 
-	getManager,
 	Repository,
 	Connection, 
 } from 'typeorm';
@@ -54,8 +53,7 @@ export class TypeService extends OptionEntityService {
 	protected async findMany({ page = 1, limit = 20, query, filter, sort, relations }: { page?: number; limit?: number; query?: string; filter?: object; sort?: object; relations?: object }): Promise<any> {
 		if (utilsCheckObj(filter['custom'])) {
 			const optionId = filter['custom']['disableTypeForOption'];
-			const manager = getManager();
-			const types = await manager.query(`SELECT id, typeId FROM type_type_option WHERE typeOptionId != $1`, [
+			const types = await this.connection.query(`SELECT id, typeId FROM type_type_option WHERE typeOptionId != $1`, [
 				optionId,
 			]);
 
