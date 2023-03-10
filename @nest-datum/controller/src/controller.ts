@@ -140,8 +140,6 @@ export class Controller {
 			}
 			ids = JSON.parse(options['ids']);
 		}
-		console.log('>>>>>', ids, utilsCheckArr(ids))
-
 		if (!utilsCheckArr(ids)) {
 			throw new this.exceptionConstructor(`Property "ids" is not valid [2].`);
 		}
