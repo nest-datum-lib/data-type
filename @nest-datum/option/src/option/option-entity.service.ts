@@ -36,8 +36,6 @@ export class OptionEntityService extends SqlService {
 	}
 
 	protected async findMany({ page = 1, limit = 20, query, filter, sort, relations }: { page?: number; limit?: number; query?: string; filter?: object; sort?: object; relations?: object }): Promise<any> {
-		console.log('???????/', filter, typeof filter);
-
 		if (utilsCheckObj(filter) && utilsCheckObj(filter['custom'])) {
 			const optionId = filter['custom']['disableForOption'];
 			const queryRunner = await this.connection.createQueryRunner();
