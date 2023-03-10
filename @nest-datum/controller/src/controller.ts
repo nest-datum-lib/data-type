@@ -4,6 +4,7 @@ import {
 	func as utilsCheckFunc,
 	obj as utilsCheckObj,
 	arr as utilsCheckArr,
+	str as utilsCheckStr,
 	exists as utilsCheckExists,
 	bool as utilsCheckBool,
 	strId as utilsCheckStrId,
