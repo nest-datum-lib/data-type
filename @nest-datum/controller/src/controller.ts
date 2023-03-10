@@ -131,8 +131,7 @@ export class Controller {
 			throw new this.exceptionConstructor(`User is undefined or token is not valid.`);
 		}
 		const user = getUser(options['accessToken']);
-
-		ids = options['ids'];
+		let ids = options['ids'];
 
 		if (utilsCheckStr(options['ids'])) {
 			if (!utilsCheckStrArr(options['ids'])) {
