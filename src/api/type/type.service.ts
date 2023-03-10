@@ -48,13 +48,14 @@ export class TypeService extends OptionEntityService {
 	}
 
 	protected async findMany({ page = 1, limit = 20, query, filter, sort, relations }: { page?: number; limit?: number; query?: string; filter?: object; sort?: object; relations?: object }): Promise<any> {
-		if (filter['custom'] && this.queryRunner) {
+		// if (filter['custom'] && this.queryRunner) {
 			// if (utilsCheckStrId(filter['custom']['disableTypeForOption'])) {
 			// 	console.log(this.queryRunner.manager.query);
 			// }
-			console.log('>>>>>.', filter['custom'], typeof filter['custom']);
-			delete filter['custom'];
-		}
+		console.log('???????/', filter, typeof filter)
+			// console.log('>>>>>.', filter['custom'], typeof filter['custom']);
+			// delete filter['custom'];
+		// }
 		return await super.findMany({ page, limit, query, filter, sort, relations });
 	}
 }
