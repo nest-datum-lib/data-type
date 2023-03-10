@@ -264,7 +264,7 @@ export class SqlService {
 		const conditions = await this.findMany(processedPayload);
 
 		conditions['relations'] = { typeTypeOptions: true };
-		conditions['where']['typeTypeOptions'] = IsNull();
+		conditions['where']['typeTypeOptions'] = { id: IsNull() };
 
 		console.log('conditions', conditions);
 
