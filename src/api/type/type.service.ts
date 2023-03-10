@@ -54,9 +54,9 @@ export class TypeService extends OptionEntityService {
 		if (utilsCheckObj(filter['custom'])) {
 			const optionId = filter['custom']['disableTypeForOption'];
 			const queryRunner = await this.connection.createQueryRunner();
-			const types = await queryRunner.query(`SELECT id, typeId FROM type_type_option WHERE typeOptionId = '${optionId}'`);
+			const types = await queryRunner.query(`SELECT id, typeId, typeOptionId FROM type_type_option WHERE typeOptionId = '${optionId}' GROUP BY typeId`);
 
-			console.log('types', `SELECT id, typeId FROM type_type_option WHERE typeOptionId = '${optionId}'`, optionId, types);
+			console.log('types', `SELECT id, typeId, typeOptionId FROM type_type_option WHERE typeOptionId = '${optionId}' GROUP BY typeId`, optionId, types);
 
 			delete filter['custom'];
 		}
