@@ -39,7 +39,7 @@ export class OptionEntityService extends SqlService {
 		if (utilsCheckObj(filter) && utilsCheckObj(filter['custom'])) {
 			const optionId = filter['custom']['disableForOption'];
 			const queryRunner = await this.connection.createQueryRunner();
-			const types = await queryRunner.query(`SELECT ${this.entityId} FROM ${this.entityOptionRepository.getRepository().metadata.tableName} WHERE ${this.entityOptionId} = '${optionId}' GROUP BY ${this.entityId}`);
+			const types = await queryRunner.query(`SELECT ${this.entityId} FROM ${this.entityOptionRepository.metadata.tableName} WHERE ${this.entityOptionId} = '${optionId}' GROUP BY ${this.entityId}`);
 
 			delete filter['custom'];
 
