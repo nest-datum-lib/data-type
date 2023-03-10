@@ -56,9 +56,8 @@ export class TypeService extends OptionEntityService {
 			const queryRunner = await this.connection.createQueryRunner();
 			const types = await queryRunner.query(`SELECT typeId FROM type_type_option WHERE typeOptionId = '${optionId}' GROUP BY typeId`);
 
-			console.log('types', `SELECT typeId FROM type_type_option WHERE typeOptionId = '${optionId}' GROUP BY typeId`, optionId, types);
-
 			delete filter['custom'];
+			filter['ids'] = [ '$Not', ...types.map((item) => item['item']) ];
 		}
 		return await super.findMany({ page, limit, query, filter, sort, relations });
 	}
