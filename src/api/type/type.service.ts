@@ -6,6 +6,7 @@ import {
 } from 'typeorm';
 import { OptionEntityService } from '@nest-datum/option';
 import { CacheService } from '@nest-datum/cache';
+import { strId as utilsCheckStrId } from '@nest-datum-utils/check';
 import { TypeTypeOption } from '../type-type-option/type-type-option.entity';
 import { Type } from './type.entity';
 
@@ -47,9 +48,10 @@ export class TypeService extends OptionEntityService {
 	}
 
 	protected async findMany({ page = 1, limit = 20, query, filter, sort, relations }: { page?: number; limit?: number; query?: string; filter?: object; sort?: object; relations?: object }): Promise<any> {
-		if (filter['custom']) {
-			console.log(filter['custom']);
-
+		if (filter['custom'] && this.queryRunner) {
+			if (utilsCheckStrId(filter['custom']['disableTypeForOption'])) {
+				console.log(this.queryRunner.manager.query);
+			}
 			delete filter['custom'];
 		}
 		return await super.findMany({ page, limit, query, filter, sort, relations });
