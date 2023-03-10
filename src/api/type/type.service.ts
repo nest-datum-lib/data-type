@@ -52,6 +52,6 @@ export class TypeService extends OptionEntityService {
 
 			delete filter['custom'];
 		}
-		return await super.findMany({ page = 1, limit = 20, query, filter, sort, relations });
+		return await super.findMany({ page, limit, query, filter, sort, relations });
 	}
 }
