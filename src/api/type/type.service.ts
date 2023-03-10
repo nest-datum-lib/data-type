@@ -18,6 +18,7 @@ export class TypeService extends OptionEntityService {
 	protected entityName = 'type';
 	protected entityConstructor = Type;
 	protected entityOptionConstructor = TypeTypeOption;
+	protected entityOptionId = 'typeOptionId';
 	protected entityId = 'typeId';
 
 	constructor(
@@ -48,20 +49,5 @@ export class TypeService extends OptionEntityService {
 			name: true,
 			description: true,
 		});
-	}
-
-	protected async findMany({ page = 1, limit = 20, query, filter, sort, relations }: { page?: number; limit?: number; query?: string; filter?: object; sort?: object; relations?: object }): Promise<any> {
-		if (utilsCheckObj(filter) && utilsCheckObj(filter['custom'])) {
-			const optionId = filter['custom']['disableTypeForOption'];
-			const queryRunner = await this.connection.createQueryRunner();
-			const types = await queryRunner.query(`SELECT ${this.entityId} FROM type_type_option WHERE typeOptionId = '${optionId}' GROUP BY ${this.entityId}`);
-
-			delete filter['custom'];
-
-			if (types.length > 0) {
-				filter['id'] = [ '$Not', ...types.map((item) => item[this.entityId]) ];
-			}
-		}
-		return await super.findMany({ page, limit, query, filter, sort, relations });
 	}
 }

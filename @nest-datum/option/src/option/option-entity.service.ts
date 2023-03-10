@@ -8,6 +8,7 @@ export class OptionEntityService extends SqlService {
 	protected entityOptionRepository;
 	protected entityOptionConstructor;
 	protected entityId;
+	protected entityOptionId;
 	protected enableTransactions;
 	protected queryRunnerManager;
 
@@ -29,5 +30,20 @@ export class OptionEntityService extends SqlService {
 		await this.entityRepository.delete({ id });
 
 		return true;
+	}
+
+	protected async findMany({ page = 1, limit = 20, query, filter, sort, relations }: { page?: number; limit?: number; query?: string; filter?: object; sort?: object; relations?: object }): Promise<any> {
+		if (utilsCheckObj(filter) && utilsCheckObj(filter['custom'])) {
+			const optionId = filter['custom']['disableForOption'];
+			const queryRunner = await this.connection.createQueryRunner();
+			const types = await queryRunner.query(`SELECT ${this.entityId} FROM ${this.entityOptionRepository.getRepository().metadata.tableName} WHERE ${this.entityOptionId} = '${optionId}' GROUP BY ${this.entityId}`);
+
+			delete filter['custom'];
+
+			if (types.length > 0) {
+				filter['id'] = [ '$Not', ...types.map((item) => item[this.entityId]) ];
+			}
+		}
+		return await super.findMany({ page, limit, query, filter, sort, relations });
 	}
 }
