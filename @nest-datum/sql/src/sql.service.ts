@@ -253,7 +253,7 @@ export class SqlService {
 
 		return await this.after(initialPayload, processedPayload, data);
 	}
-// filter={"typeTypeOptions":{"typeOptionId":["$Not","23169585-c75d-452c-a89b-1355aead044f"],"id":["$IsNull"]}}
+
 	public async many(payload): Promise<any> {
 		await this.manyBefore(payload);
 
@@ -264,9 +264,6 @@ export class SqlService {
 		}
 		const processedPayload = await this.manyProperties(payload);
 		const condition = await this.findMany(processedPayload);
-
-		console.log('condition', ((condition['where'] || {})['typeTypeOptions'] || {}));
-
 		const many = await this.entityRepository.findAndCount(condition);
 		const output = {
 			rows: many[0],
