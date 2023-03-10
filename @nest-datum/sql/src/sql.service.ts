@@ -264,8 +264,7 @@ export class SqlService {
 		const conditions = await this.findMany(processedPayload);
 
 		conditions['relations'] = { typeTypeOptions: true };
-
-		console.log('conditions', conditions);
+		conditions['where']['typeTypeOptions'] = IsNull();
 
 		const many = await this.entityRepository.findAndCount(conditions);
 		const output = {
