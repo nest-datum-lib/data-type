@@ -266,6 +266,8 @@ export class SqlService {
 		conditions['relations'] = { typeTypeOptions: true };
 		conditions['where']['typeTypeOptions'] = IsNull();
 
+		console.log('conditions', conditions);
+
 		const many = await this.entityRepository.findAndCount(conditions);
 		const output = {
 			rows: many[0],
