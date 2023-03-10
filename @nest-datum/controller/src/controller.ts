@@ -132,17 +132,19 @@ export class Controller {
 		}
 		const user = getUser(options['accessToken']);
 
-		console.log('>>>>>>.', options['ids']);
+		ids = options['ids'];
 
-		if (!utilsCheckStrArr(options['ids'])) {
-			throw new this.exceptionConstructor(`Property "ids" is not valid [1].`);
+		if (utilsCheckStr(options['ids'])) {
+			if (!utilsCheckStrArr(options['ids'])) {
+				throw new this.exceptionConstructor(`Property "ids" is not valid [1].`);
+			}
+			ids = JSON.parse(options['ids']);
 		}
-		const ids = JSON.parse(options['ids']);
+		console.log('>>>>>', ids, utilsCheckArr(ids))
 
 		if (!utilsCheckArr(ids)) {
 			throw new this.exceptionConstructor(`Property "ids" is not valid [2].`);
 		}
-
 		return {
 			accessToken: options['accessToken'],
 			userId: user['id'],
