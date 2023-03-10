@@ -6,7 +6,10 @@ import {
 } from 'typeorm';
 import { OptionEntityService } from '@nest-datum/option';
 import { CacheService } from '@nest-datum/cache';
-import { strId as utilsCheckStrId } from '@nest-datum-utils/check';
+import { 
+	strId as utilsCheckStrId,
+	obj as utilsCheckObj, 
+} from '@nest-datum-utils/check';
 import { TypeTypeOption } from '../type-type-option/type-type-option.entity';
 import { Type } from './type.entity';
 
