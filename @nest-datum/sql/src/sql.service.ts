@@ -263,8 +263,6 @@ export class SqlService {
 		const processedPayload = await this.manyProperties(payload);
 		const conditions = await this.findMany(processedPayload);
 
-		delete conditions['relations'];
-
 		console.log('conditions', conditions);
 
 		const many = await this.entityRepository.findAndCount(conditions);
