@@ -1,8 +1,7 @@
 const mergeDeep = require('merge-deep');
 
 import {  
-	And,
-	Or,
+	Raw,
 	Not,
 	LessThan,
 	LessThanOrEqual,
@@ -30,9 +29,8 @@ import { loopAsync as utilsLoopAsync } from '@nest-datum-utils/loop';
 
 export class SqlService {
 	private operators = {
+		'$Raw': Raw,
 		'$Not': Not,
-		'$And': And,
-		'$Or': Or,
 		'$LessThan': LessThan,
 		'$LessThanOrEqual': LessThanOrEqual,
 		'$MoreThan': MoreThan,
