@@ -1,5 +1,8 @@
 import { SqlService } from '@nest-datum/sql';
-import { objQueryRunner as utilsCheckObjQueryRunner } from '@nest-datum-utils/check';
+import { 
+	obj as utilsCheckObj,
+	objQueryRunner as utilsCheckObjQueryRunner, 
+} from '@nest-datum-utils/check';
 
 export class OptionEntityService extends SqlService {
 	protected entityName;
