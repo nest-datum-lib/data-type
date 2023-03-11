@@ -128,7 +128,7 @@ export class OptionService extends SqlService {
 				? `(${conditionIds}) AND (${conditionParentIds})`
 				: `"${this.entityId}" = '${payload['id']}'`;
 			
-			console.log('5555', condition);
+			console.log('5555', `DELETE FROM ${this.entityOptionRelationRepository.metadata.tableName} WHERE ${condition}`);
 
 			(utilsCheckObjQueryRunner(this.queryRunner) 
 				&& this.enableTransactions === true)
