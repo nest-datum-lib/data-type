@@ -108,8 +108,8 @@ export class OptionService extends SqlService {
 				i++;
 			}
 			console.log('5555', parentIds);
-			
-			(utilsCheckObjQueryRunner(this.queryRunner) 
+
+			/*(utilsCheckObjQueryRunner(this.queryRunner) 
 				&& this.enableTransactions === true)
 				? await this.queryRunner.manager.delete(this.entityOptionRelationConstructor, {
 					[this.entityId]: payload['id'],
@@ -153,7 +153,8 @@ export class OptionService extends SqlService {
 				}
 				i++;
 			}
-			return await this.contentOutput(payload, await this.contentAfter(payload, processedPayload, output));
+			return await this.contentOutput(payload, await this.contentAfter(payload, processedPayload, output));*/
+			return [];
 		}
 		catch (err) {
 			await this.rollbackQueryRunnerManager();
