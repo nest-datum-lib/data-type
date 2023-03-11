@@ -116,7 +116,7 @@ export class OptionService extends SqlService {
 				}
 				i++;
 			}
-			console.log('5555', ids, Array.from(ids));
+			console.log('5555', ids, ((Array.from(ids)).length > 0));
 
 			(utilsCheckObjQueryRunner(this.queryRunner) 
 				&& this.enableTransactions === true)
