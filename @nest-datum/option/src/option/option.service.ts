@@ -82,7 +82,7 @@ export class OptionService extends SqlService {
 			await this.startQueryRunnerManager();
 			await this.contentBefore(payload);
 
-			console.log('000000', payload);
+			console.log('000000', (payload || {})['data']);
 
 			this.cacheService.clear([ this.entityName, 'many' ]);
 			this.cacheService.clear([ this.entityServicedName, 'many' ]);
