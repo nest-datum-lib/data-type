@@ -90,23 +90,38 @@ export class OptionService extends SqlService {
 			console.log('11111', this.entityName, this.entityServicedName);
 			console.log('22222222', utilsCheckObjQueryRunner(this.queryRunner), this.enableTransactions, typeof this.enableTransactions);
 
-			(utilsCheckObjQueryRunner(this.queryRunner) 
-				&& this.enableTransactions === true)
-				? await this.queryRunner.manager.delete(this.entityOptionRelationConstructor, {
-					[this.entityId]: payload['id'],
-				})
-				: await this.entityOptionRelationRepository.delete({
-					[this.entityId]: payload['id'],
-				});
-
 			console.log('33333');
 
 			const processedPayload = await this.contentProperties(payload);
 			let i = 0,
 				ii = 0,
-				output = [];
+				output = [],
+				parentIds = [];
 
 			console.log('444444', processedPayload);
+
+			while (i < processedPayload['data'].length) {
+				if (processedPayload['data'][i]['parentId']) {
+					parentIds.push(processedPayload['data'][i]['parentId']);
+				}
+				i++;
+			}
+			(utilsCheckObjQueryRunner(this.queryRunner) 
+				&& this.enableTransactions === true)
+				? await this.queryRunner.manager.delete(this.entityOptionRelationConstructor, {
+					[this.entityId]: payload['id'],
+					...(parentIds.length > 0)
+						? { parentId: [ In([ ...parentIds ]) ] }
+						: {},
+				})
+				: await this.entityOptionRelationRepository.delete({
+					[this.entityId]: payload['id'],
+					...(parentIds.length > 0)
+						? { parentId: [ In([ ...parentIds ]) ] }
+						: {},
+				});
+			
+			i = 0;
 
 			while (i < processedPayload['data'].length) {
 				ii = 0;
