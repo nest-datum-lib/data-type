@@ -124,12 +124,12 @@ export class OptionService extends SqlService {
 				&& this.enableTransactions === true)
 				? await this.queryRunner.manager.delete(this.entityOptionRelationConstructor, {
 					...((Array.from(parentIds)).length > 0)
-						? { id: [ In([ ...Array.from(ids) ]) ], parentIds: [ ...Array.from(parentIds) ] }
+						? { id: [ In([ ...Array.from(ids) ]) ], parentId: [ ...Array.from(parentIds) ] }
 						: { [this.entityId]: payload['id'] },
 				})
 				: await this.entityOptionRelationRepository.delete({
 					...((Array.from(parentIds)).length > 0)
-						? { id: [ In([ ...Array.from(ids) ]) ], parentIds: [ ...Array.from(parentIds) ] }
+						? { id: [ In([ ...Array.from(ids) ]) ], parentId: [ ...Array.from(parentIds) ] }
 						: { [this.entityId]: payload['id'] },
 				});
 
