@@ -81,9 +81,14 @@ export class OptionService extends SqlService {
 			await this.startQueryRunnerManager();
 			await this.contentBefore(payload);
 
+			console.log('000000', payload);
+
 			this.cacheService.clear([ this.entityName, 'many' ]);
 			this.cacheService.clear([ this.entityServicedName, 'many' ]);
 			this.cacheService.clear([ this.entityServicedName, 'one' ]);
+
+			console.log('11111', this.entityName, this.entityServicedName);
+			console.log('22222222', utilsCheckObjQueryRunner(this.queryRunner), this.enableTransactions, typeof this.enableTransactions);
 
 			(utilsCheckObjQueryRunner(this.queryRunner) 
 				&& this.enableTransactions === true)
@@ -94,15 +99,21 @@ export class OptionService extends SqlService {
 					[this.entityId]: payload['id'],
 				});
 
+			console.log('33333');
+
 			const processedPayload = await this.contentProperties(payload);
 			let i = 0,
 				ii = 0,
 				output = [];
 
+			console.log('444444', processedPayload);
+
 			while (i < processedPayload['data'].length) {
 				ii = 0;
 
 				const option = processedPayload['data'][i];
+
+				console.log('5555', option);
 
 				while (ii < option.length) {
 					const {
@@ -110,6 +121,12 @@ export class OptionService extends SqlService {
 						entityOptionId,
 						...optionData
 					} = option[ii];
+
+					console.log('6666', {
+						entityId,
+						entityOptionId,
+						...optionData
+					});
 
 					output.push(await this.contentProcess({
 						...optionData,
