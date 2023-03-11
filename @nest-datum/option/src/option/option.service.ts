@@ -109,8 +109,8 @@ export class OptionService extends SqlService {
 					const option = processedPayload['data'][i];
 
 					while (ii < option.length) {
-						ids.add(processedPayload['data'][i]['id']);
-						parentIds.add(processedPayload['data'][i]['parentId']);
+						ids.add(option[i]['id']);
+						parentIds.add(option[i]['parentId']);
 						ii++;
 					}
 				}
