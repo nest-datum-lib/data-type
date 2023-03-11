@@ -97,17 +97,26 @@ export class OptionService extends SqlService {
 			let i = 0,
 				ii = 0,
 				output = [],
-				parentIds = [];
+				ids = new Set,
+				parentIds = new Set;
 
 			console.log('444444', processedPayload);
 
 			while (i < processedPayload['data'].length) {
-				if (processedPayload['data'][i]['parentId']) {
-					parentIds.push(processedPayload['data'][i]['parentId']);
+				if (processedPayload['data'][i]) {
+					ii = 0;
+
+					const option = processedPayload['data'][i];
+
+					while (ii < option.length) {
+						ids.add(processedPayload['data'][i]['id']);
+						parentIds.add(processedPayload['data'][i]['parentId']);
+						ii++;
+					}
 				}
 				i++;
 			}
-			console.log('5555', parentIds);
+			console.log('5555', parentIds, ids, Array.from(parentIds), Array.from(ids));
 
 			/*(utilsCheckObjQueryRunner(this.queryRunner) 
 				&& this.enableTransactions === true)
