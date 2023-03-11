@@ -1,3 +1,4 @@
+import { In } from 'typeorm';
 import { SqlService } from '@nest-datum/sql';
 import { objQueryRunner as utilsCheckObjQueryRunner } from '@nest-datum-utils/check';
 
@@ -120,7 +121,7 @@ export class OptionService extends SqlService {
 						? { parentId: [ In([ ...parentIds ]) ] }
 						: {},
 				});
-			
+
 			i = 0;
 
 			while (i < processedPayload['data'].length) {
