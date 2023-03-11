@@ -97,7 +97,7 @@ export class OptionService extends SqlService {
 			let i = 0,
 				ii = 0,
 				output = [],
-				ids = new Set,
+				ids = new Set;
 
 			console.log('444444', processedPayload);
 
