@@ -107,6 +107,8 @@ export class OptionService extends SqlService {
 				}
 				i++;
 			}
+			console.log('5555', parentIds);
+			
 			(utilsCheckObjQueryRunner(this.queryRunner) 
 				&& this.enableTransactions === true)
 				? await this.queryRunner.manager.delete(this.entityOptionRelationConstructor, {
@@ -128,8 +130,6 @@ export class OptionService extends SqlService {
 				ii = 0;
 
 				const option = processedPayload['data'][i];
-
-				console.log('5555', option);
 
 				while (ii < option.length) {
 					const {
