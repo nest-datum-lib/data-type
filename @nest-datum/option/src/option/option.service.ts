@@ -118,20 +118,16 @@ export class OptionService extends SqlService {
 				}
 				i++;
 			}
-			console.log('5555', parentIds, ids);
+			const condition = ((Array.from(parentIds)).length > 0)
+				? `"id" IN (${(Array.from(parentIds))}) AND parentId IN (${(Array.from(parentIds))})`
+				: `"${this.entityId}" = '${payload['id']}'`;
+			
+			console.log('5555', condition);
 
 			(utilsCheckObjQueryRunner(this.queryRunner) 
 				&& this.enableTransactions === true)
-				? await this.queryRunner.manager.delete(this.entityOptionRelationConstructor, {
-					...((Array.from(parentIds)).length > 0)
-						? { id: [ In([ ...Array.from(ids) ]) ], parentId: [ ...Array.from(parentIds) ] }
-						: { [this.entityId]: payload['id'] },
-				})
-				: await this.entityOptionRelationRepository.delete({
-					...((Array.from(parentIds)).length > 0)
-						? { id: [ In([ ...Array.from(ids) ]) ], parentId: [ ...Array.from(parentIds) ] }
-						: { [this.entityId]: payload['id'] },
-				});
+				? await this.queryRunner.manager.query(`DELETE FROM ${this.entityOptionRelationRepository.metadata.tableName} WHERE ${condition}`)
+				: await this.entityOptionRelationRepository.query(`DELETE FROM ${this.entityOptionRelationRepository.metadata.tableName} WHERE ${condition}`);
 
 			i = 0;
 			ii = 0;
