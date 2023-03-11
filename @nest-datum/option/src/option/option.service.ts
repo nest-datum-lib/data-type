@@ -121,8 +121,8 @@ export class OptionService extends SqlService {
 			const idsArr = Array.from(ids);
 			const parentIdsArr = Array.from(parentIds);
 
-			const conditionIds = idsArr.map((id, index) => `"id" = "${id}"${(index - 1 > idsArr.length) ? ' OR ' : ''}`);
-			const conditionParentIds = parentIdsArr.map((id, index) => `"parentId" = "${id}"${(index - 1 > parentIdsArr.length) ? ' OR ' : ''}`);
+			const conditionIds = idsArr.map((id, index) => `"id" = "${id}"${(idsArr.length - 1 > index) ? ' OR ' : ''}`).join('');
+			const conditionParentIds = parentIdsArr.map((id, index) => `"parentId" = "${id}"${(parentIdsArr.length - 1 > index) ? ' OR ' : ''}`).join('');
 
 			const condition = (parentIdsArr.length > 0)
 				? `(${conditionIds}) AND (${conditionParentIds})`
