@@ -118,8 +118,11 @@ export class OptionService extends SqlService {
 				}
 				i++;
 			}
+			const conditionIds = (Array.from(parentIds)).map((id) => `"id" = "${id}"${(index - 1 > parentIds.length) ? ' OR ' : ''}`);
+			const conditionParentIds = (Array.from(parentIds)).map((id) => `"id" = "${id}"${(index - 1 > parentIds.length) ? ' OR ' : ''}`);
+
 			const condition = ((Array.from(parentIds)).length > 0)
-				? `"id" IN (${(Array.from(ids)).map((id) => `"${id}"`)}) AND parentId IN (${(Array.from(parentIds)).map((id) => `"${id}"`)})`
+				? `(${conditionIds}) AND (${conditionParentIds})`
 				: `"${this.entityId}" = '${payload['id']}'`;
 			
 			console.log('5555', condition);
