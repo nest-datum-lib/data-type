@@ -121,16 +121,14 @@ export class OptionService extends SqlService {
 			(utilsCheckObjQueryRunner(this.queryRunner) 
 				&& this.enableTransactions === true)
 				? await this.queryRunner.manager.delete(this.entityOptionRelationConstructor, {
-					[this.entityId]: payload['id'],
 					...((Array.from(ids)).length > 0)
 						? { id: [ In([ ...Array.from(ids) ]) ] }
-						: {},
+						: { [this.entityId]: payload['id'] },
 				})
 				: await this.entityOptionRelationRepository.delete({
-					[this.entityId]: payload['id'],
 					...((Array.from(ids)).length > 0)
 						? { id: [ In([ ...Array.from(ids) ]) ] }
-						: {},
+						: { [this.entityId]: payload['id'] },
 				});
 
 			i = 0;
