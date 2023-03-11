@@ -98,7 +98,6 @@ export class OptionService extends SqlService {
 				ii = 0,
 				output = [],
 				ids = new Set,
-				parentIds = new Set;
 
 			console.log('444444', processedPayload);
 
@@ -112,26 +111,25 @@ export class OptionService extends SqlService {
 						console.log('7777777777777', option[ii])
 
 						ids.add(option[ii]['id']);
-						parentIds.add(option[ii]['parentId']);
 						ii++;
 					}
 				}
 				i++;
 			}
-			console.log('5555', parentIds, ids, Array.from(parentIds), Array.from(ids));
+			console.log('5555', ids, Array.from(ids));
 
-			/*(utilsCheckObjQueryRunner(this.queryRunner) 
+			(utilsCheckObjQueryRunner(this.queryRunner) 
 				&& this.enableTransactions === true)
 				? await this.queryRunner.manager.delete(this.entityOptionRelationConstructor, {
 					[this.entityId]: payload['id'],
-					...(parentIds.length > 0)
-						? { parentId: [ In([ ...parentIds ]) ] }
+					...((Array.from(ids)).length > 0)
+						? { id: [ In([ ...Array.from(ids) ]) ] }
 						: {},
 				})
 				: await this.entityOptionRelationRepository.delete({
 					[this.entityId]: payload['id'],
-					...(parentIds.length > 0)
-						? { parentId: [ In([ ...parentIds ]) ] }
+					...((Array.from(ids)).length > 0)
+						? { id: [ In([ ...Array.from(ids) ]) ] }
 						: {},
 				});
 
@@ -165,7 +163,7 @@ export class OptionService extends SqlService {
 				}
 				i++;
 			}
-			return await this.contentOutput(payload, await this.contentAfter(payload, processedPayload, output));*/
+			return await this.contentOutput(payload, await this.contentAfter(payload, processedPayload, output));
 			return [];
 		}
 		catch (err) {
