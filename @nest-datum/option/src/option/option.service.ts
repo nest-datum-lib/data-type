@@ -130,10 +130,10 @@ export class OptionService extends SqlService {
 			
 			console.log('5555', `DELETE FROM ${this.entityOptionRelationRepository.metadata.tableName} WHERE ${condition}`);
 
-			// (utilsCheckObjQueryRunner(this.queryRunner) 
-			// 	&& this.enableTransactions === true)
-			// 	? await this.queryRunner.manager.query(`DELETE FROM ${this.entityOptionRelationRepository.metadata.tableName} WHERE ${condition}`)
-			// 	: await this.entityOptionRelationRepository.query(`DELETE FROM ${this.entityOptionRelationRepository.metadata.tableName} WHERE ${condition}`);
+			(utilsCheckObjQueryRunner(this.queryRunner) 
+				&& this.enableTransactions === true)
+				? await this.queryRunner.manager.query(`DELETE FROM ${this.entityOptionRelationRepository.metadata.tableName} WHERE ${condition}`)
+				: await this.entityOptionRelationRepository.query(`DELETE FROM ${this.entityOptionRelationRepository.metadata.tableName} WHERE ${condition}`);
 
 			i = 0;
 			ii = 0;
