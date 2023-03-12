@@ -121,12 +121,12 @@ export class OptionService extends SqlService {
 			const idsArr = Array.from(ids);
 			const parentIdsArr = Array.from(parentIds);
 
-			const conditionIds = idsArr.map((id, index) => `"id" = "${id}"${(idsArr.length - 1 > index) ? ' OR ' : ''}`).join('');
-			const conditionParentIds = parentIdsArr.map((id, index) => `"parentId" = "${id}"${(parentIdsArr.length - 1 > index) ? ' OR ' : ''}`).join('');
+			const conditionIds = idsArr.map((id, index) => `id = '${id}'${(idsArr.length - 1 > index) ? ' OR ' : ''}`).join('');
+			const conditionParentIds = parentIdsArr.map((id, index) => `parentId = '${id}'${(parentIdsArr.length - 1 > index) ? ' OR ' : ''}`).join('');
 
 			const condition = (parentIdsArr.length > 0)
 				? `(${conditionIds}) AND (${conditionParentIds})`
-				: `"${this.entityId}" = '${payload['id']}'`;
+				: `${this.entityId} = '${payload['id']}'`;
 			
 			console.log('5555', `DELETE FROM ${this.entityOptionRelationRepository.metadata.tableName} WHERE ${condition}`);
 
