@@ -147,6 +147,7 @@ export class OptionService extends SqlService {
 					const {
 						entityId,
 						entityOptionId,
+						withNewId,
 						...optionData
 					} = option[ii];
 
@@ -156,6 +157,9 @@ export class OptionService extends SqlService {
 						...optionData
 					});
 
+					if (withNewId === true) {
+						delete optionData['id'];
+					}
 					output.push(await this.contentProcess({
 						...optionData,
 						[this.entityId]: entityId,
