@@ -6,20 +6,20 @@ import {
 } from 'typeorm';
 import { OptionEntityService } from '@nest-datum/option';
 import { CacheService } from '@nest-datum/cache';
-import { TypeTypeOption } from '../type-type-option/type-type-option.entity';
-import { Type } from './type.entity';
+import { AccessAccessOption } from '../access-access-option/access-access-option.entity';
+import { Access } from './access.entity';
 
 @Injectable()
-export class TypeService extends OptionEntityService {
-	protected entityName = 'type';
-	protected entityConstructor = Type;
-	protected entityOptionConstructor = TypeTypeOption;
-	protected entityOptionId = 'typeOptionId';
-	protected entityId = 'typeId';
+export class AccessService extends OptionEntityService {
+	protected entityName = 'access';
+	protected entityConstructor = Access;
+	protected entityOptionConstructor = AccessAccessOption;
+	protected entityOptionId = 'accessOptionId';
+	protected entityId = 'accessId';
 
 	constructor(
-		@InjectRepository(Type) protected entityRepository: Repository<Type>,
-		@InjectRepository(TypeTypeOption) protected entityOptionRepository: Repository<TypeTypeOption>,
+		@InjectRepository(Access) protected entityRepository: Repository<Access>,
+		@InjectRepository(AccessAccessOption) protected entityOptionRepository: Repository<AccessAccessOption>,
 		protected connection: Connection,
 		protected cacheService: CacheService,
 	) {
@@ -30,8 +30,7 @@ export class TypeService extends OptionEntityService {
 		return ({
 			...super.manyGetColumns(customColumns),
 			userId: true,
-			parentId: true,
-			typeStatusId: true,
+			accessStatusId: true,
 			name: true,
 			description: true,
 			isDeleted: true,
@@ -41,7 +40,7 @@ export class TypeService extends OptionEntityService {
 
 	protected manyGetQueryColumns(customColumns: object = {}) {
 		return ({
-			...super.manyGetQueryColumns(customColumns),
+		...super.manyGetQueryColumns(customColumns),
 			name: true,
 			description: true,
 		});

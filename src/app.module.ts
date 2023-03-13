@@ -22,6 +22,11 @@ import {
 	sql, 
 } from '@nest-datum-common/config';
 import { SettingModule } from './api/setting/setting.module';
+import { AccessModule } from './api/access/access.module';
+import { AccessStatusModule } from './api/access-status/access-status.module';
+import { AccessOptionModule } from './api/access-option/access-option.module';
+import { AccessAccessOptionModule } from './api/access-access-option/access-access-option.module';
+import { RoleAccessModule } from './api/role-access/role-access.module';
 import { TypeModule } from './api/type/type.module';
 import { TypeStatusModule } from './api/type-status/type-status.module';
 import { TypeOptionModule } from './api/type-option/type-option.module';
@@ -37,6 +42,11 @@ import { AppController } from './app.controller';
 		CacheModule,
 		SqlModule,
 		SettingModule,
+		AccessModule,
+		AccessStatusModule,
+		AccessOptionModule,
+		AccessAccessOptionModule,
+		RoleAccessModule,
 		TypeModule,
 		TypeStatusModule,
 		TypeOptionModule,

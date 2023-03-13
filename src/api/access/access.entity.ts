@@ -1,12 +1,21 @@
 import { 
 	PrimaryGeneratedColumn,
+	Entity, 
 	Column,
 	CreateDateColumn,
 	UpdateDateColumn,
 	Index,
+	OneToMany,
 } from 'typeorm';
+import {
+	IsEmail,
+} from 'class-validator';
+import { AccessAccessAccessOption } from '../access-access-access-option/access-access-access-option.entity';
+import { AccessAccessOption } from '../access-access-option/access-access-option.entity';
+import { RoleAccess } from '../role-access/role-access.entity';
 
-export class Setting {
+@Entity()
+export class Access {
 	@PrimaryGeneratedColumn('uuid')
 	public id: string;
 
@@ -16,7 +25,7 @@ export class Setting {
 
 	@Column({ default: '' })
 	@Index()
-	public dataTypeId: string;
+	public accessStatusId: string;
 
 	@Column({ default: '' })
 	public envKey: string;
@@ -26,14 +35,7 @@ export class Setting {
 	public name: string;
 
 	@Column({ default: '' })
-	@Index()
 	public description: string;
-
-	@Column({ default: '' })
-	public value: string;
-
-	@Column({ default: '' })
-	public regex: string;
 
 	@Column('boolean', { default: false })
 	public isDeleted: boolean = false;
@@ -55,4 +57,13 @@ export class Setting {
 		onUpdate: 'CURRENT_TIMESTAMP', 
 	})
 	public updatedAt: Date;
+
+	@OneToMany(() => AccessAccessOption, (accessAccessOption) => accessAccessOption.access)
+	public accessAccessOptions: AccessAccessOption[];
+
+	@OneToMany(() => AccessAccessAccessOption, (accessAccessAccessOption) => accessAccessAccessOption.access)
+	public accessAccessAccessOptions: AccessAccessAccessOption[];
+
+	@OneToMany(() => RoleAccess, (roleAccess) => roleAccess.access)
+	public roleAccesses: RoleAccess[];
 }
