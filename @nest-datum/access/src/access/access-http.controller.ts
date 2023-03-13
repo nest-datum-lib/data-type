@@ -3,10 +3,14 @@ import {
 	Patch,
 	Body,
 	Param,
+	ForbiddenException,
 } from '@nestjs/common';
 import { AccessToken } from '@nest-datum-common/decorators';
 import { HttpController } from '@nest-datum/controller';
-import { strName as utilsCheckStrName } from '@nest-datum-utils/check';
+import { 
+	strId as utilsCheckStrId,
+	strName as utilsCheckStrName, 
+} from '@nest-datum-utils/check';
 
 export class AccessHttpController extends HttpController {
 	protected entityService;
@@ -16,7 +20,7 @@ export class AccessHttpController extends HttpController {
 			throw new ForbiddenException(`Property "name" is not valid.`);
 		}
 		if (!utilsCheckStrId(options['accessStatusId'])) {
-			throw new WarningException(`Property "accessStatusId" is not valid.`);
+			throw new ForbiddenException(`Property "accessStatusId" is not valid.`);
 		}
 		return await this.validateUpdate(options);
 	}

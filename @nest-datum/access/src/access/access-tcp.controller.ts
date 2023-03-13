@@ -4,12 +4,15 @@ import {
 } from '@nestjs/microservices';
 import { WarningException } from '@nest-datum-common/exceptions';
 import { TcpController } from '@nest-datum/controller';
-import { strId as utilsCheckStrId } from '@nest-datum-utils/check';
+import { 
+	strId as utilsCheckStrId,
+	strName as utilsCheckStrName, 
+} from '@nest-datum-utils/check';
 
 export class AccessTcpController extends TcpController {
 	async validateCreate(options) {
 		if (!utilsCheckStrName(options['name'])) {
-			throw new ForbiddenException(`Property "name" is not valid.`);
+			throw new WarningException(`Property "name" is not valid.`);
 		}
 		if (!utilsCheckStrId(options['accessStatusId'])) {
 			throw new WarningException(`Property "accessStatusId" is not valid.`);
