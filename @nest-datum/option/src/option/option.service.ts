@@ -82,16 +82,9 @@ export class OptionService extends SqlService {
 			await this.startQueryRunnerManager();
 			await this.contentBefore(payload);
 
-			console.log('000000', (payload || {})['data']);
-
 			this.cacheService.clear([ this.entityName, 'many' ]);
 			this.cacheService.clear([ this.entityServicedName, 'many' ]);
 			this.cacheService.clear([ this.entityServicedName, 'one' ]);
-
-			console.log('11111', this.entityName, this.entityServicedName);
-			console.log('22222222', utilsCheckObjQueryRunner(this.queryRunner), this.enableTransactions, typeof this.enableTransactions);
-
-			console.log('33333');
 
 			const processedPayload = await this.contentProperties(payload);
 			let i = 0,
@@ -100,8 +93,6 @@ export class OptionService extends SqlService {
 				ids = new Set,
 				parentIds = new Set;
 
-			console.log('444444', processedPayload);
-
 			while (i < processedPayload['data'].length) {
 				if (processedPayload['data'][i]) {
 					ii = 0;
@@ -109,8 +100,6 @@ export class OptionService extends SqlService {
 					const option = processedPayload['data'][i];
 
 					while (ii < option.length) {
-						console.log('7777777777777', option[ii])
-
 						ids.add(option[ii]['id']);
 						parentIds.add(option[ii]['parentId']);
 						ii++;
@@ -128,8 +117,6 @@ export class OptionService extends SqlService {
 				? `(${conditionIds}) AND (${conditionParentIds})`
 				: `${this.entityId} = '${payload['id']}'`;
 			
-			console.log('5555', `DELETE FROM ${this.entityOptionRelationRepository.metadata.tableName} WHERE ${condition}`);
-
 			(utilsCheckObjQueryRunner(this.queryRunner) 
 				&& this.enableTransactions === true)
 				? await this.queryRunner.manager.query(`DELETE FROM ${this.entityOptionRelationRepository.metadata.tableName} WHERE ${condition}`)
@@ -150,12 +137,6 @@ export class OptionService extends SqlService {
 						withNewId,
 						...optionData
 					} = option[ii];
-
-					console.log('6666', {
-						entityId,
-						entityOptionId,
-						...optionData
-					});
 
 					if (withNewId === true) {
 						delete optionData['id'];
