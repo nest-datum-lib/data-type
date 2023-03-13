@@ -80,7 +80,7 @@ export class AccessHttpTcpController extends HttpTcpOptionController {
 		return await this.serviceHandlerWrapper(async () => await this.transportService.send({
 			name: this.serviceName, 
 			cmd: `${this.entityName}.update`,
-		}, await this.validateCreate({
+		}, await this.validateUpdate({
 			accessToken,
 			id,
 			newId,
