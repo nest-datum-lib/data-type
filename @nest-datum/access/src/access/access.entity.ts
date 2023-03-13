@@ -6,13 +6,17 @@ import {
 	Index,
 } from 'typeorm';
 
-export class Status {
+export class Access {
 	@PrimaryGeneratedColumn('uuid')
 	public id: string;
 
 	@Column({ default: '' })
 	@Index()
 	public userId: string;
+
+	@Column({ default: '' })
+	@Index()
+	public accessStatusId: string;
 
 	@Column({ default: '' })
 	public envKey: string;
@@ -22,14 +26,13 @@ export class Status {
 	public name: string;
 
 	@Column({ default: '' })
-	@Index()
 	public description: string;
 
 	@Column('boolean', { default: false })
-	public isNotDelete: boolean = false;
+	public isDeleted: boolean = false;
 
 	@Column('boolean', { default: false })
-	public isDeleted: boolean = false;
+	public isNotDelete: boolean = false;
 
 	@CreateDateColumn({ 
 		type: 'timestamp', 
