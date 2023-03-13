@@ -13,7 +13,10 @@ export class AccessHttpController extends HttpController {
 
 	async validateCreate(options) {
 		if (!utilsCheckStrName(options['name'])) {
-			throw new this.exceptionConstructor(`Property "name" is not valid.`);
+			throw new ForbiddenException(`Property "name" is not valid.`);
+		}
+		if (!utilsCheckStrId(options['accessStatusId'])) {
+			throw new WarningException(`Property "accessStatusId" is not valid.`);
 		}
 		return await this.validateUpdate(options);
 	}
@@ -21,7 +24,9 @@ export class AccessHttpController extends HttpController {
 	async validateUpdate(options) {
 		return {
 			...await super.validateUpdate(options),
-			value: String(options['value'] ?? ''),
+			...(options['accessStatusId'] && utilsCheckStrId(options['accessStatusId'])) 
+				? { accessStatusId: options['accessStatusId'] } 
+				: {},
 		};
 	}
 

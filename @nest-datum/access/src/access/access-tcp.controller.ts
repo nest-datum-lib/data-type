@@ -8,6 +8,9 @@ import { strId as utilsCheckStrId } from '@nest-datum-utils/check';
 
 export class AccessTcpController extends TcpController {
 	async validateCreate(options) {
+		if (!utilsCheckStrName(options['name'])) {
+			throw new ForbiddenException(`Property "name" is not valid.`);
+		}
 		if (!utilsCheckStrId(options['accessStatusId'])) {
 			throw new WarningException(`Property "accessStatusId" is not valid.`);
 		}
