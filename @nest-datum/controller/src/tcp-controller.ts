@@ -9,6 +9,8 @@ export class TcpController extends Controller {
 	protected entityService;
 
 	async many(payload) {
+		console.log('000000', payload);
+
 		return await this.serviceHandlerWrapper(async () => await this.entityService.many(await this.validateMany(payload)));
 	}
 
