@@ -17,9 +17,9 @@ import {
 	strId as utilsCheckStrId,
 } from '@nest-datum-utils/check';
 
-@Controller(`${process.env.APP_NAME}/type`)
+@Controller(`${process.env.SERVICE_DATA_TYPE}/type`)
 export class TypeHttpTcpController extends HttpTcpOptionController {
-	protected serviceName = process.env.APP_NAME;
+	protected serviceName = process.env.SERVICE_DATA_TYPE;
 	protected entityName = 'type';
 	protected entityOptionContentName = 'typeOptionRelation';
 
