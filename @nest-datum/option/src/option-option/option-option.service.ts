@@ -9,6 +9,12 @@ export class OptionOptionService extends SqlService {
 	protected entityOptionName;
 
 	protected manyGetColumns(customColumns: object = {}) {
+		console.log('>>>>>>>>>>', ({
+			...super.manyGetColumns(),
+			[this.entityId]: true,
+			[this.entityOptionId]: true,
+		}));
+
 		return ({
 			...super.manyGetColumns(),
 			[this.entityId]: true,
