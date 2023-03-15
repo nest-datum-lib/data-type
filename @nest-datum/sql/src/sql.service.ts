@@ -59,6 +59,7 @@ export class SqlService {
 			id: true,
 			createdAt: true,
 			updatedAt: true,
+			...(this.withEnvKey === true) ? { envKey: true } : {},
 		});
 	}
 
