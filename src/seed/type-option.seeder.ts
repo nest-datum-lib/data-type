@@ -5,7 +5,7 @@ import {
 	Connection, 
 } from 'typeorm';
 import { Promise as Bluebird } from 'bluebird';
-import { TypeOption } from 'src/api/type-option/type-option.entity';
+import { TypeOption } from '../api/type-option/type-option.entity';
 import {
 	USER_DEFAULT_ID,
 	DATA_TYPE_TEXT_ID,

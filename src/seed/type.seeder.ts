@@ -6,7 +6,7 @@ import {
 } from 'typeorm';
 import { Promise as Bluebird } from 'bluebird';
 import { encryptPassword } from '@nest-datum/jwt';
-import { Type } from 'src/api/type/type.entity';
+import { Type } from '../api/type/type.entity';
 import {
 	USER_DEFAULT_ID,
 	DATA_TYPE_STATUS_ACTIVE_ID,
