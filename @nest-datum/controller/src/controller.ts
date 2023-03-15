@@ -32,8 +32,6 @@ export class Controller {
 		}
 		const user = getUser(options['accessToken']);
 
-		console.log('111111111');
-
 		try {
 			options['select'] = JSON.parse(options['select']);
 		}
@@ -54,32 +52,6 @@ export class Controller {
 		}
 		catch (err) {
 		}
-		console.log('2222', {
-			accessToken: options['accessToken'],
-			userId: user['id'],
-			...utilsCheckNumericInt(options['page'])
-				? { page: Number(options['page'] || 1) }
-				: { page: 1 },
-			...utilsCheckNumericInt(options['limit'])
-				? { limit: Number(options['limit'] || 20) }
-				: { limit: 20 },
-			...utilsCheckObj(options['select']) 
-				? { select: options['select'] } 
-				: {},
-			...utilsCheckObj(options['relations']) 
-				? { relations: options['relations'] } 
-				: {},
-			...utilsCheckObj(options['sort']) 
-				? { sort: options['sort'] } 
-				: {},
-			...utilsCheckObj(options['filter']) 
-				? { filter: options['filter'] } 
-				: {},
-			...utilsCheckStrDescription(options['query']) 
-				? { query: options['query'] } 
-				: {},
-		});
-
 		return {
 			accessToken: options['accessToken'],
 			userId: user['id'],
