@@ -11,32 +11,43 @@ import {
 } from '@nestjs/common';
 import { HttpTcpOptionController } from '@nest-datum/controller';
 import { AccessToken } from '@nest-datum-common/decorators';
+import { TransportService } from '@nest-datum/transport';
 import {
 	strName as utilsCheckStrName,
 	strId as utilsCheckStrId,
 } from '@nest-datum-utils/check';
 
-export class AccessHttpTcpController extends HttpTcpOptionController {
-	protected transportService;
-	protected serviceName;
-	protected entityName = 'access';
-	protected entityOptionContentName = 'accessOptionRelation';
+@Controller(`${process.env.APP_NAME}/type`)
+export class TypeHttpTcpController extends HttpTcpOptionController {
+	protected serviceName = process.env.APP_NAME;
+	protected entityName = 'type';
+	protected entityOptionContentName = 'typeOptionRelation';
+
+	constructor(
+		protected transportService: TransportService,
+	) {
+		super();
+	}
 
 	async validateCreate(options) {
 		if (!utilsCheckStrName(options['name'])) {
 			throw new ForbiddenException(`Property "name" is not valid.`);
 		}
-		if (!utilsCheckStrId(options['accessStatusId'])) {
-			throw new ForbiddenException(`Property "accessStatusId" is not valid.`);
+		if (!utilsCheckStrId(options['typeStatusId'])) {
+			throw new ForbiddenException(`Property "typeStatusId" is not valid.`);
 		}
 		return await this.validateUpdate(options);
 	}
 
+
 	async validateUpdate(options) {
 		return {
 			...await super.validateUpdate(options),
-			...(options['accessStatusId'] && utilsCheckStrId(options['accessStatusId'])) 
-				? { accessStatusId: options['accessStatusId'] } 
+			...(options['typeStatusId'] && utilsCheckStrId(options['typeStatusId'])) 
+				? { typeStatusId: options['typeStatusId'] } 
+				: {},
+			...(options['parentId'] && utilsCheckStrId(options['parentId'])) 
+				? { parentId: options['parentId'] } 
 				: {},
 		};
 	}
@@ -46,9 +57,10 @@ export class AccessHttpTcpController extends HttpTcpOptionController {
 		@AccessToken() accessToken: string,
 		@Body('id') id: string,
 		@Body('userId') userId: string,
-		@Body('accessStatusId') accessStatusId: string,
-		@Body('name') name: string,
+		@Body('parentId') parentId: string,
+		@Body('typeStatusId') typeStatusId: string,
 		@Body('envKey') envKey: string,
+		@Body('name') name: string,
 		@Body('description') description: string,
 		@Body('isNotDelete') isNotDelete: boolean,
 	) {
@@ -59,9 +71,10 @@ export class AccessHttpTcpController extends HttpTcpOptionController {
 			accessToken,
 			id,
 			userId,
-			accessStatusId,
-			name,
+			parentId,
+			typeStatusId,
 			envKey,
+			name,
 			description,
 			isNotDelete,
 		})));
@@ -73,9 +86,10 @@ export class AccessHttpTcpController extends HttpTcpOptionController {
 		@Param('id') id: string,
 		@Body('id') newId: string,
 		@Body('userId') userId: string,
-		@Body('accessStatusId') accessStatusId: string,
-		@Body('name') name: string,
+		@Body('parentId') parentId: string,
+		@Body('typeStatusId') typeStatusId: string,
 		@Body('envKey') envKey: string,
+		@Body('name') name: string,
 		@Body('description') description: string,
 		@Body('isNotDelete') isNotDelete: boolean,
 		@Body('isDeleted') isDeleted: boolean,
@@ -88,9 +102,10 @@ export class AccessHttpTcpController extends HttpTcpOptionController {
 			id,
 			newId,
 			userId,
-			accessStatusId,
-			name,
+			parentId,
+			typeStatusId,
 			envKey,
+			name,
 			description,
 			isNotDelete,
 			isDeleted,

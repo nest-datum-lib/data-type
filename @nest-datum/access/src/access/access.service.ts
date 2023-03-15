@@ -3,6 +3,7 @@ import { OptionEntityService } from '@nest-datum/option';
 import { CacheService } from '@nest-datum/cache';
 
 export class AccessService extends OptionEntityService {
+	protected withEnvKey = true;
 	protected entityName = 'access';
 	protected entityOptionId = 'accessOptionId';
 	protected entityId = 'accessId';

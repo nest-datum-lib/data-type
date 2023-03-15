@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TypeController } from './type.controller';
+import { TypeTcpController } from './type-tcp.controller';
 
-describe('TypeController', () => {
-	let controller: TypeController;
+describe('TypeTcpController', () => {
+	let controller: TypeTcpController;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			controllers: [TypeController],
+			controllers: [TypeTcpController],
 		}).compile();
 
-		controller = module.get<TypeController>(TypeController);
+		controller = module.get<TypeTcpController>(TypeTcpController);
 	});
 
 	it('should be defined', () => {

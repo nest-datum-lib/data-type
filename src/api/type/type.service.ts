@@ -16,6 +16,7 @@ export class TypeService extends OptionEntityService {
 	protected entityOptionConstructor = TypeTypeOption;
 	protected entityOptionId = 'typeOptionId';
 	protected entityId = 'typeId';
+	protected withEnvKey = true;
 
 	constructor(
 		@InjectRepository(Type) protected entityRepository: Repository<Type>,

@@ -17,6 +17,7 @@ export class OptionService extends SqlService {
 	protected entityOptionId;
 	protected entityOptionRelationId;
 	protected entityWithTwoStepRemoval = true;
+	protected withEnvKey = true;
 
 	// constructor(
 	// 	protected entityRepository,

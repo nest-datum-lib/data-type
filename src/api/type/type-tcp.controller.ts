@@ -13,7 +13,7 @@ import {
 import { TypeService } from './type.service';
 
 @Controller()
-export class TypeController extends TcpController {
+export class TypeTcpController extends TcpController {
 	constructor(
 		protected transportService: TransportService,
 		protected entityService: TypeService,
