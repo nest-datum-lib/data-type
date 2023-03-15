@@ -12,20 +12,20 @@ import {
 	TransportModule,
 	TransportService, 
 } from '@nest-datum/transport';
-import { TypeHttpTcpController } from './type-http-tcp.controller';
+import { TypeOptionHttpTcpController } from './type-option-http-tcp.controller';
 
 @Module({
 	imports: [ 
 		ReplicaModule,
 		TransportModule, 
 	],
-	controllers: [ TypeHttpTcpController ],
+	controllers: [ TypeOptionHttpTcpController ],
 	providers: [ 
 		ReplicaService,
 		TransportService, 
 	],
 })
-export class TypeHttpTcpModule implements NestModule {
+export class TypeOptionHttpTcpModule implements NestModule {
 	configure(consumer: MiddlewareConsumer) {
 	}
 }

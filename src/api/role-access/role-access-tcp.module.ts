@@ -1,6 +1,5 @@
-import { RedisModule } from '@liaoliaots/nestjs-redis';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { 
 	ReplicaModule,
 	ReplicaService, 
@@ -17,30 +16,31 @@ import {
 	SqlModule,
 	SqlService, 
 } from '@nest-datum/sql';
-import { 
-	redis,
-	sql, 
-} from '@nest-datum-common/config';
-import { AppController } from './app.controller';
-import { Tcp as Modules } from './index';
+import { RoleAccessService } from './role-access.service';
+import { RoleAccessTcpController } from './role-access-tcp.controller';
+import { Access } from '../access/access.entity';
+import { RoleAccess } from './role-access.entity';
 
 @Module({
+	controllers: [ RoleAccessTcpController ],
 	imports: [
-		TypeOrmModule.forRoot(sql),
-		RedisModule.forRoot(redis),
+		TypeOrmModule.forFeature([ 
+			Access,
+			RoleAccess,
+		]),
 		ReplicaModule,
 		TransportModule,
 		CacheModule,
 		SqlModule,
-		...Object.keys(Modules).map((key) => Modules[key]),
 	],
-	controllers: [ AppController ],
 	providers: [
 		ReplicaService,
 		TransportService,
 		CacheService,
 		SqlService,
+		RoleAccessService, 
 	],
 })
-export class AppModule {
+export class RoleAccessTcpModule {
 }
+

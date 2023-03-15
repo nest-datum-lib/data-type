@@ -1,6 +1,5 @@
-import { RedisModule } from '@liaoliaots/nestjs-redis';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { 
 	ReplicaModule,
 	ReplicaService, 
@@ -17,30 +16,27 @@ import {
 	SqlModule,
 	SqlService, 
 } from '@nest-datum/sql';
-import { 
-	redis,
-	sql, 
-} from '@nest-datum-common/config';
-import { AppController } from './app.controller';
-import { Tcp as Modules } from './index';
+import { TypeStatusService } from './type-status.service';
+import { TypeStatusTcpController } from './type-status-tcp.controller';
+import { TypeStatus } from './type-status.entity';
 
 @Module({
+	controllers: [ TypeStatusTcpController ],
 	imports: [
-		TypeOrmModule.forRoot(sql),
-		RedisModule.forRoot(redis),
+		TypeOrmModule.forFeature([ TypeStatus ]),
 		ReplicaModule,
 		TransportModule,
 		CacheModule,
 		SqlModule,
-		...Object.keys(Modules).map((key) => Modules[key]),
 	],
-	controllers: [ AppController ],
 	providers: [
 		ReplicaService,
 		TransportService,
 		CacheService,
 		SqlService,
+		TypeStatusService, 
 	],
 })
-export class AppModule {
+export class TypeStatusTcpModule {
 }
+
