@@ -1,5 +1,7 @@
 
 const toLat = (str: string) => {
+	console.log('tpLat', str);
+
 	const arr = {
 		'а': 'a', 
 		'б': 'b', 
@@ -41,7 +43,7 @@ const toLat = (str: string) => {
 	};
 	let newString = [];
 
-	return [ ...(str.split('')) ].map((l) => {
+	return [ ...((str || '').split('')) ].map((l) => {
 		let latL = arr[l.toLocaleLowerCase()];
 
 		if (l !== l.toLocaleLowerCase()) {
