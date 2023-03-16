@@ -409,13 +409,11 @@ export class SqlService {
 		delete payload['newId'];
 
 		if (this.withEnvKey === true) {
-			if (payload['envKey']) {
-				payload['envKey'] = (utilsCheckStrEnvKey(payload['envKey']) ? payload['envKey'] : formatToLat(payload['envKey']))
-					.trim()
-					.replace(/[\n\t]/g, '')
-					.replace(/[^a-zA-Z0-9]/g, '_')
-					.toUpperCase();
-			}
+			payload['envKey'] = (utilsCheckStrEnvKey(payload['envKey']) ? payload['envKey'] : formatToLat(payload['envKey']))
+				.trim()
+				.replace(/[\n\t]/g, '')
+				.replace(/[^a-zA-Z0-9]/g, '_')
+				.toUpperCase();
 		}
 		else {
 			delete payload['envKey'];
@@ -471,13 +469,11 @@ export class SqlService {
 		delete payload['refreshToken'];
 
 		if (this.withEnvKey === true) {
-			if (payload['envKey']) {
-				payload['envKey'] = (utilsCheckStrEnvKey(payload['envKey']) ? payload['envKey'] : formatToLat(payload['envKey']))
-					.trim()
-					.replace(/[\n\t]/g, '')
-					.replace(/[^a-zA-Z0-9]/g, '_')
-					.toUpperCase();
-			}
+			payload['envKey'] = (utilsCheckStrEnvKey(payload['envKey']) ? payload['envKey'] : formatToLat(payload['envKey']))
+				.trim()
+				.replace(/[\n\t]/g, '')
+				.replace(/[^a-zA-Z0-9]/g, '_')
+				.toUpperCase();
 		}
 		else {
 			delete payload['envKey'];
