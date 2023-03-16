@@ -1,7 +1,5 @@
 
 const toLat = (str: string) => {
-	console.log('toLat', str);
-
 	const arr = {
 		'а': 'a', 
 		'б': 'b', 
