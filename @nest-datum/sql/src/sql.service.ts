@@ -408,14 +408,7 @@ export class SqlService {
 		delete payload['refreshToken'];
 		delete payload['newId'];
 
-		if (this.withEnvKey === true) {
-			payload['envKey'] = (utilsCheckStrEnvKey(payload['envKey']) ? payload['envKey'] : formatToLat(payload['name']))
-				.trim()
-				.replace(/[\n\t]/g, '')
-				.replace(/[^a-zA-Z0-9]/g, '_')
-				.toUpperCase();
-		}
-		else {
+		if (!this.withEnvKey || !utilsCheckStrEnvKey(payload['envKey'])) {
 			delete payload['envKey'];
 		}
 		return payload;
