@@ -1,6 +1,6 @@
 
 const toLat = (str: string) => {
-	console.log('tpLat', str);
+	console.log('toLat', str);
 
 	const arr = {
 		'а': 'a', 
@@ -44,7 +44,7 @@ const toLat = (str: string) => {
 	let newString = [];
 
 	return [ ...((str || '').split('')) ].map((l) => {
-		let latL = arr[l.toLocaleLowerCase()];
+		let latL = arr[l.toLocaleLowerCase()] ?? l.toLocaleLowerCase();
 
 		if (l !== l.toLocaleLowerCase()) {
 			latL = latL.charAt(0).toLocaleUpperCase() + latL.slice(1);
