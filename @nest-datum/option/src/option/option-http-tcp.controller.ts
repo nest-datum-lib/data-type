@@ -50,8 +50,7 @@ export class OptionHttpTcpController extends HttpTcpController {
 		@Body('isMultiline') isMultiline: boolean,
 		@Body('isNotDelete') isNotDelete: boolean,
 	) {
-		return await this.serviceHandlerWrapper(
-			async () => await this.transportService.send({
+		return await this.serviceHandlerWrapper(async () => await this.transportService.send({
 			name: this.serviceName, 
 			cmd: `${this.entityName}.create`,
 		}, await this.validateCreate({
@@ -87,8 +86,7 @@ export class OptionHttpTcpController extends HttpTcpController {
 		@Body('isNotDelete') isNotDelete: boolean,
 		@Body('isDeleted') isDeleted: boolean,
 	) {
-		return await this.serviceHandlerWrapper(
-			async () => await this.transportService.send({
+		return await this.serviceHandlerWrapper(async () => await this.transportService.send({
 			name: this.serviceName, 
 			cmd: `${this.entityName}.update`,
 		}, await this.validateUpdate({
