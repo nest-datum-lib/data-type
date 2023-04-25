@@ -4,10 +4,12 @@ import {
 	Column,
 	CreateDateColumn,
 	UpdateDateColumn,
-	ManyToOne,
+	Index,
 	OneToMany,
 } from 'typeorm';
-import { TypeStatus } from '../type-status/type-status.entity';
+import {
+	IsEmail,
+} from 'class-validator';
 import { TypeTypeTypeOption } from '../type-type-type-option/type-type-type-option.entity';
 import { TypeTypeOption } from '../type-type-option/type-type-option.entity';
 
@@ -20,25 +22,28 @@ export class Type {
 	public parentId: string;
 
 	@Column({ default: '' })
+	@Index()
 	public userId: string;
 
 	@Column({ default: '' })
 	public typeStatusId: string;
 
-	@ManyToOne(() => TypeStatus, (typeStatus) => typeStatus.types)
-	public typeStatus: TypeStatus;
+	@Column({ default: '' })
+	public envKey: string;
 
 	@Column()
+	@Index({ unique: true })
 	public name: string;
 
 	@Column({ default: '' })
+	@Index()
 	public description: string;
 
 	@Column('boolean', { default: false })
 	public isDeleted: boolean = false;
 
 	@Column('boolean', { default: false })
-	public isNotDelete: boolean;
+	public isNotDelete: boolean = false;
 
 	@CreateDateColumn({ 
 		type: 'timestamp', 

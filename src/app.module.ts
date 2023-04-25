@@ -1,32 +1,40 @@
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
-import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeormConfig } from 'config/typeorm';
-import { redisConfig } from 'config/redis';
-import { BalancerModule } from 'nest-datum/balancer/src';
+import { Module } from '@nestjs/common';
+import { sqlConfig as utilsFormatSqlConfig } from '@nest-datum-utils/format';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { SettingModule } from './api/setting/setting.module';
-import { TypeStatusModule } from './api/type-status/type-status.module';
-import { TypeOptionModule } from './api/type-option/type-option.module';
-import { TypeTypeOptionModule } from './api/type-type-option/type-type-option.module';
-import { TypeTypeTypeOptionModule } from './api/type-type-type-option/type-type-type-option.module';
-import { TypeModule } from './api/type/type.module';
+import { Tcp as Modules } from './index';
 
 @Module({
 	imports: [
-		TypeOrmModule.forRoot(typeormConfig),
-		RedisModule.forRoot(redisConfig),
-		BalancerModule,
-		SettingModule,
-		TypeStatusModule,
-		TypeOptionModule,
-		TypeTypeOptionModule,
-		TypeTypeTypeOptionModule,
-		TypeModule,
+		TypeOrmModule.forRoot(utilsFormatSqlConfig()),
+		RedisModule.forRoot({
+			config: [{
+				namespace: 'Transport',
+				host: process.env.REDIS_TRANSPORT_HOST,
+				port: Number(process.env.REDIS_TRANSPORT_PORT),
+				password: process.env.REDIS_TRANSPORT_PASSWORD,
+				db: Number(process.env.REDIS_TRANSPORT_DB),
+			}, {
+				namespace: 'Cache',
+				host: process.env.REDIS_CACHE_HOST,
+				port: Number(process.env.REDIS_CACHE_PORT),
+				password: process.env.REDIS_CACHE_PASSWORD,
+				db: Number(process.env.REDIS_CACHE_DB),
+			}, {
+				namespace: 'Queue',
+				host: process.env.REDIS_QUEUE_HOST,
+				port: Number(process.env.REDIS_QUEUE_PORT),
+				password: process.env.REDIS_QUEUE_PASSWORD,
+				db: Number(process.env.REDIS_QUEUE_DB),
+			}],
+		}),
+		
+		...Object.keys(Modules).map((key) => Modules[key]),
 	],
 	controllers: [ AppController ],
-	providers: [ AppService ],
+	providers: [],
 })
 export class AppModule {
 }
