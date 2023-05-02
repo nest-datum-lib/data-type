@@ -103,6 +103,22 @@ export class TypeSeeder {
 				description: 'PDF files from lesna API.',
 				isNotDelete: true,
 			}, {
+				id: 'happ-data-type-file-email-view',
+				envKey: 'HAPP_DATA_TYPE_FILE_EMAIL_VIEW',
+				userId: process.env.USER_ID,
+				typeStatusId: 'happ-data-type-status-active',
+				name: 'Email views',
+				description: 'Email letter view files.',
+				isNotDelete: true,
+			}, {
+				id: 'happ-data-type-file-page-view',
+				envKey: 'HAPP_DATA_TYPE_FILE_PAGE_VIEW',
+				userId: process.env.USER_ID,
+				typeStatusId: 'happ-data-type-status-active',
+				name: 'Page views',
+				description: 'Page view files.',
+				isNotDelete: true,
+			}, {
 				id: 'happ-data-type-select-avatar',
 				envKey: 'HAPP_DATA_TYPE_SELECT_AVATAR',
 				userId: process.env.USER_ID,
