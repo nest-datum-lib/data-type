@@ -27,7 +27,7 @@ export class SeedService {
 			this.settings,
 			this.typeStatus,
 			this.typeOption,
-			// this.type,
+			this.type,
 			// this.typeTypeOption,
 		];
 	}
